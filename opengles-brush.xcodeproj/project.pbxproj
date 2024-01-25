@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F5B79F922B6214F4004BD866 /* DrawingCurveState.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5B79F902B6214F4004BD866 /* DrawingCurveState.mm */; };
+		F5B79F962B621583004BD866 /* FreeHandCurve.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B79F932B621583004BD866 /* FreeHandCurve.m */; };
+		F5B79F982B621590004BD866 /* InsertItemOpe.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B79F972B621590004BD866 /* InsertItemOpe.m */; };
+		F5B79F9D2B62159B004BD866 /* Polyline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5B79F9B2B62159B004BD866 /* Polyline.cpp */; };
+		F5B79F9E2B62159B004BD866 /* Triangles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5B79F9C2B62159B004BD866 /* Triangles.cpp */; };
+		F5B79FA12B6215C3004BD866 /* IFreeDrawOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B79F9F2B6215C3004BD866 /* IFreeDrawOperation.m */; };
+		F5B79FA42B6215E1004BD866 /* IDrawItem.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B79FA32B6215E1004BD866 /* IDrawItem.m */; };
+		F5B79FA72B621611004BD866 /* RemoveItemOpe.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B79FA62B621611004BD866 /* RemoveItemOpe.m */; };
+		F5B79FAD2B621685004BD866 /* TimeUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B79FAA2B621684004BD866 /* TimeUnit.m */; };
+		F5B79FAE2B621685004BD866 /* TimeCalculateType.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B79FAB2B621685004BD866 /* TimeCalculateType.m */; };
+		F5B79FB22B621782004BD866 /* NonuniformSpline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5B79FB02B621782004BD866 /* NonuniformSpline.cpp */; };
+		F5B79FB42B621C2E004BD866 /* IFreeDrawViewState.m in Sources */ = {isa = PBXBuildFile; fileRef = F5B79FB32B621C2E004BD866 /* IFreeDrawViewState.m */; };
 		F5E6CEF12B6201D300B38F16 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E6CEF02B6201D300B38F16 /* AppDelegate.m */; };
 		F5E6CEF42B6201D300B38F16 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E6CEF32B6201D300B38F16 /* SceneDelegate.m */; };
 		F5E6CEF72B6201D300B38F16 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E6CEF62B6201D300B38F16 /* ViewController.m */; };
@@ -14,9 +26,56 @@
 		F5E6CEFC2B6201D500B38F16 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CEFB2B6201D500B38F16 /* Assets.xcassets */; };
 		F5E6CEFF2B6201D500B38F16 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CEFD2B6201D500B38F16 /* LaunchScreen.storyboard */; };
 		F5E6CF022B6201D500B38F16 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E6CF012B6201D500B38F16 /* main.m */; };
+		F5E6CF0A2B6202AA00B38F16 /* FreeDrawView.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5E6CF092B6202AA00B38F16 /* FreeDrawView.mm */; };
+		F5E6CF0D2B6207D000B38F16 /* ResourceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5E6CF0C2B6207D000B38F16 /* ResourceManager.mm */; };
+		F5E6CF1A2B620C1200B38F16 /* WhiteAsAlpha.frag in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF112B620C1200B38F16 /* WhiteAsAlpha.frag */; };
+		F5E6CF1B2B620C1200B38F16 /* Normal.frag in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF122B620C1200B38F16 /* Normal.frag */; };
+		F5E6CF1C2B620C1200B38F16 /* NoTexture.frag in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF132B620C1200B38F16 /* NoTexture.frag */; };
+		F5E6CF1D2B620C1200B38F16 /* ForImage.frag in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF142B620C1200B38F16 /* ForImage.frag */; };
+		F5E6CF1E2B620C1200B38F16 /* DiscardAlphaZero.frag in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF152B620C1200B38F16 /* DiscardAlphaZero.frag */; };
+		F5E6CF1F2B620C1200B38F16 /* Blur.frag in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF162B620C1200B38F16 /* Blur.frag */; };
+		F5E6CF202B620C1200B38F16 /* Normal.vert in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF182B620C1200B38F16 /* Normal.vert */; };
+		F5E6CF212B620C1200B38F16 /* Normal.metal in Sources */ = {isa = PBXBuildFile; fileRef = F5E6CF192B620C1200B38F16 /* Normal.metal */; };
+		F5E6CF2D2B620C4F00B38F16 /* FreeDrawPenGray-2_1.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF232B620C4F00B38F16 /* FreeDrawPenGray-2_1.png */; };
+		F5E6CF2E2B620C4F00B38F16 /* FreeDrawPenGray-2_2.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF242B620C4F00B38F16 /* FreeDrawPenGray-2_2.png */; };
+		F5E6CF2F2B620C4F00B38F16 /* FreeDrawPenGray-2_16.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF252B620C4F00B38F16 /* FreeDrawPenGray-2_16.png */; };
+		F5E6CF302B620C4F00B38F16 /* FreeDrawPenGray_32.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF262B620C4F00B38F16 /* FreeDrawPenGray_32.png */; };
+		F5E6CF312B620C4F00B38F16 /* FreeDrawPenGray-2_4.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF272B620C4F00B38F16 /* FreeDrawPenGray-2_4.png */; };
+		F5E6CF322B620C4F00B38F16 /* FreeDrawPenMono_32.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF282B620C4F00B38F16 /* FreeDrawPenMono_32.png */; };
+		F5E6CF332B620C4F00B38F16 /* FreeDrawPenMono_16.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF292B620C4F00B38F16 /* FreeDrawPenMono_16.png */; };
+		F5E6CF342B620C4F00B38F16 /* FreeDrawPenGray_16.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF2A2B620C4F00B38F16 /* FreeDrawPenGray_16.png */; };
+		F5E6CF352B620C4F00B38F16 /* FreeDrawPenGray-2_8.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF2B2B620C4F00B38F16 /* FreeDrawPenGray-2_8.png */; };
+		F5E6CF362B620C4F00B38F16 /* FreeDrawPenGray-2_32.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF2C2B620C4F00B38F16 /* FreeDrawPenGray-2_32.png */; };
+		F5E6CF392B620F1A00B38F16 /* FreeDrawViewingState.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E6CF382B620F1A00B38F16 /* FreeDrawViewingState.m */; };
+		F5E6CF3D2B620FF800B38F16 /* TapAndPanGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E6CF3C2B620FF800B38F16 /* TapAndPanGestureRecognizer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F5B79F902B6214F4004BD866 /* DrawingCurveState.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DrawingCurveState.mm; sourceTree = "<group>"; };
+		F5B79F912B6214F4004BD866 /* DrawingCurveState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingCurveState.h; sourceTree = "<group>"; };
+		F5B79F932B621583004BD866 /* FreeHandCurve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeHandCurve.m; sourceTree = "<group>"; };
+		F5B79F942B621583004BD866 /* InsertItemOpe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InsertItemOpe.h; sourceTree = "<group>"; };
+		F5B79F952B621583004BD866 /* FreeHandCurve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeHandCurve.h; sourceTree = "<group>"; };
+		F5B79F972B621590004BD866 /* InsertItemOpe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InsertItemOpe.m; sourceTree = "<group>"; };
+		F5B79F992B62159B004BD866 /* Polyline.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Polyline.hpp; sourceTree = "<group>"; };
+		F5B79F9A2B62159B004BD866 /* Triangles.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Triangles.hpp; sourceTree = "<group>"; };
+		F5B79F9B2B62159B004BD866 /* Polyline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Polyline.cpp; sourceTree = "<group>"; };
+		F5B79F9C2B62159B004BD866 /* Triangles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Triangles.cpp; sourceTree = "<group>"; };
+		F5B79F9F2B6215C3004BD866 /* IFreeDrawOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFreeDrawOperation.m; sourceTree = "<group>"; };
+		F5B79FA02B6215C3004BD866 /* IFreeDrawOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFreeDrawOperation.h; sourceTree = "<group>"; };
+		F5B79FA22B6215E1004BD866 /* IDrawItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDrawItem.h; sourceTree = "<group>"; };
+		F5B79FA32B6215E1004BD866 /* IDrawItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IDrawItem.m; sourceTree = "<group>"; };
+		F5B79FA52B621611004BD866 /* RemoveItemOpe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoveItemOpe.h; sourceTree = "<group>"; };
+		F5B79FA62B621611004BD866 /* RemoveItemOpe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemoveItemOpe.m; sourceTree = "<group>"; };
+		F5B79FA82B621640004BD866 /* Const.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Const.h; sourceTree = "<group>"; };
+		F5B79FA92B621684004BD866 /* TimeUnit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeUnit.h; sourceTree = "<group>"; };
+		F5B79FAA2B621684004BD866 /* TimeUnit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeUnit.m; sourceTree = "<group>"; };
+		F5B79FAB2B621685004BD866 /* TimeCalculateType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeCalculateType.m; sourceTree = "<group>"; };
+		F5B79FAC2B621685004BD866 /* TimeCalculateType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeCalculateType.h; sourceTree = "<group>"; };
+		F5B79FAF2B621760004BD866 /* Vertex.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vertex.hpp; sourceTree = "<group>"; };
+		F5B79FB02B621782004BD866 /* NonuniformSpline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NonuniformSpline.cpp; sourceTree = "<group>"; };
+		F5B79FB12B621782004BD866 /* NonuniformSpline.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NonuniformSpline.hpp; sourceTree = "<group>"; };
+		F5B79FB32B621C2E004BD866 /* IFreeDrawViewState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IFreeDrawViewState.m; sourceTree = "<group>"; };
 		F5E6CEEC2B6201D300B38F16 /* opengles-brush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "opengles-brush.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5E6CEEF2B6201D300B38F16 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F5E6CEF02B6201D300B38F16 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -29,6 +88,36 @@
 		F5E6CEFE2B6201D500B38F16 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F5E6CF002B6201D500B38F16 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5E6CF012B6201D500B38F16 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		F5E6CF082B6202AA00B38F16 /* FreeDrawView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FreeDrawView.h; sourceTree = "<group>"; };
+		F5E6CF092B6202AA00B38F16 /* FreeDrawView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = FreeDrawView.mm; sourceTree = "<group>"; };
+		F5E6CF0B2B62076000B38F16 /* IResourceManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IResourceManager.hpp; sourceTree = "<group>"; };
+		F5E6CF0C2B6207D000B38F16 /* ResourceManager.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ResourceManager.mm; sourceTree = "<group>"; };
+		F5E6CF0E2B62091B00B38F16 /* Vector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vector.hpp; sourceTree = "<group>"; };
+		F5E6CF0F2B620A4600B38F16 /* opengles-brush-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "opengles-brush-Prefix.pch"; sourceTree = "<group>"; };
+		F5E6CF112B620C1200B38F16 /* WhiteAsAlpha.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = WhiteAsAlpha.frag; sourceTree = "<group>"; };
+		F5E6CF122B620C1200B38F16 /* Normal.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Normal.frag; sourceTree = "<group>"; };
+		F5E6CF132B620C1200B38F16 /* NoTexture.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = NoTexture.frag; sourceTree = "<group>"; };
+		F5E6CF142B620C1200B38F16 /* ForImage.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = ForImage.frag; sourceTree = "<group>"; };
+		F5E6CF152B620C1200B38F16 /* DiscardAlphaZero.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = DiscardAlphaZero.frag; sourceTree = "<group>"; };
+		F5E6CF162B620C1200B38F16 /* Blur.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Blur.frag; sourceTree = "<group>"; };
+		F5E6CF172B620C1200B38F16 /* FreeDrawShaderTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeDrawShaderTypes.h; sourceTree = "<group>"; };
+		F5E6CF182B620C1200B38F16 /* Normal.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Normal.vert; sourceTree = "<group>"; };
+		F5E6CF192B620C1200B38F16 /* Normal.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Normal.metal; sourceTree = "<group>"; };
+		F5E6CF232B620C4F00B38F16 /* FreeDrawPenGray-2_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FreeDrawPenGray-2_1.png"; sourceTree = "<group>"; };
+		F5E6CF242B620C4F00B38F16 /* FreeDrawPenGray-2_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FreeDrawPenGray-2_2.png"; sourceTree = "<group>"; };
+		F5E6CF252B620C4F00B38F16 /* FreeDrawPenGray-2_16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FreeDrawPenGray-2_16.png"; sourceTree = "<group>"; };
+		F5E6CF262B620C4F00B38F16 /* FreeDrawPenGray_32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FreeDrawPenGray_32.png; sourceTree = "<group>"; };
+		F5E6CF272B620C4F00B38F16 /* FreeDrawPenGray-2_4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FreeDrawPenGray-2_4.png"; sourceTree = "<group>"; };
+		F5E6CF282B620C4F00B38F16 /* FreeDrawPenMono_32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FreeDrawPenMono_32.png; sourceTree = "<group>"; };
+		F5E6CF292B620C4F00B38F16 /* FreeDrawPenMono_16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FreeDrawPenMono_16.png; sourceTree = "<group>"; };
+		F5E6CF2A2B620C4F00B38F16 /* FreeDrawPenGray_16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = FreeDrawPenGray_16.png; sourceTree = "<group>"; };
+		F5E6CF2B2B620C4F00B38F16 /* FreeDrawPenGray-2_8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FreeDrawPenGray-2_8.png"; sourceTree = "<group>"; };
+		F5E6CF2C2B620C4F00B38F16 /* FreeDrawPenGray-2_32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "FreeDrawPenGray-2_32.png"; sourceTree = "<group>"; };
+		F5E6CF372B620F1A00B38F16 /* IFreeDrawViewState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFreeDrawViewState.h; sourceTree = "<group>"; };
+		F5E6CF382B620F1A00B38F16 /* FreeDrawViewingState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeDrawViewingState.m; sourceTree = "<group>"; };
+		F5E6CF3A2B620F8300B38F16 /* FreeDrawViewingState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeDrawViewingState.h; sourceTree = "<group>"; };
+		F5E6CF3B2B620FF800B38F16 /* TapAndPanGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TapAndPanGestureRecognizer.h; sourceTree = "<group>"; };
+		F5E6CF3C2B620FF800B38F16 /* TapAndPanGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TapAndPanGestureRecognizer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,17 +152,88 @@
 			children = (
 				F5E6CEEF2B6201D300B38F16 /* AppDelegate.h */,
 				F5E6CEF02B6201D300B38F16 /* AppDelegate.m */,
+				F5E6CEFB2B6201D500B38F16 /* Assets.xcassets */,
+				F5B79FA82B621640004BD866 /* Const.h */,
+				F5B79F912B6214F4004BD866 /* DrawingCurveState.h */,
+				F5B79F902B6214F4004BD866 /* DrawingCurveState.mm */,
+				F5E6CF082B6202AA00B38F16 /* FreeDrawView.h */,
+				F5E6CF092B6202AA00B38F16 /* FreeDrawView.mm */,
+				F5E6CF3A2B620F8300B38F16 /* FreeDrawViewingState.h */,
+				F5E6CF382B620F1A00B38F16 /* FreeDrawViewingState.m */,
+				F5B79F952B621583004BD866 /* FreeHandCurve.h */,
+				F5B79F932B621583004BD866 /* FreeHandCurve.m */,
+				F5B79FA22B6215E1004BD866 /* IDrawItem.h */,
+				F5B79FA32B6215E1004BD866 /* IDrawItem.m */,
+				F5B79FA02B6215C3004BD866 /* IFreeDrawOperation.h */,
+				F5B79F9F2B6215C3004BD866 /* IFreeDrawOperation.m */,
+				F5E6CF372B620F1A00B38F16 /* IFreeDrawViewState.h */,
+				F5B79FB32B621C2E004BD866 /* IFreeDrawViewState.m */,
+				F5E6CF002B6201D500B38F16 /* Info.plist */,
+				F5B79F942B621583004BD866 /* InsertItemOpe.h */,
+				F5B79F972B621590004BD866 /* InsertItemOpe.m */,
+				F5E6CF0B2B62076000B38F16 /* IResourceManager.hpp */,
+				F5E6CEFD2B6201D500B38F16 /* LaunchScreen.storyboard */,
+				F5E6CF012B6201D500B38F16 /* main.m */,
+				F5E6CEF82B6201D300B38F16 /* Main.storyboard */,
+				F5B79FB02B621782004BD866 /* NonuniformSpline.cpp */,
+				F5B79FB12B621782004BD866 /* NonuniformSpline.hpp */,
+				F5E6CF0F2B620A4600B38F16 /* opengles-brush-Prefix.pch */,
+				F5B79F9B2B62159B004BD866 /* Polyline.cpp */,
+				F5B79F992B62159B004BD866 /* Polyline.hpp */,
+				F5B79FA52B621611004BD866 /* RemoveItemOpe.h */,
+				F5B79FA62B621611004BD866 /* RemoveItemOpe.m */,
+				F5E6CF0C2B6207D000B38F16 /* ResourceManager.mm */,
 				F5E6CEF22B6201D300B38F16 /* SceneDelegate.h */,
 				F5E6CEF32B6201D300B38F16 /* SceneDelegate.m */,
+				F5E6CF102B620C1200B38F16 /* Shaders */,
+				F5E6CF3B2B620FF800B38F16 /* TapAndPanGestureRecognizer.h */,
+				F5E6CF3C2B620FF800B38F16 /* TapAndPanGestureRecognizer.m */,
+				F5E6CF222B620C4F00B38F16 /* Textures */,
+				F5B79FAC2B621685004BD866 /* TimeCalculateType.h */,
+				F5B79FAB2B621685004BD866 /* TimeCalculateType.m */,
+				F5B79FA92B621684004BD866 /* TimeUnit.h */,
+				F5B79FAA2B621684004BD866 /* TimeUnit.m */,
+				F5B79F9C2B62159B004BD866 /* Triangles.cpp */,
+				F5B79F9A2B62159B004BD866 /* Triangles.hpp */,
+				F5E6CF0E2B62091B00B38F16 /* Vector.hpp */,
+				F5B79FAF2B621760004BD866 /* Vertex.hpp */,
 				F5E6CEF52B6201D300B38F16 /* ViewController.h */,
 				F5E6CEF62B6201D300B38F16 /* ViewController.m */,
-				F5E6CEF82B6201D300B38F16 /* Main.storyboard */,
-				F5E6CEFB2B6201D500B38F16 /* Assets.xcassets */,
-				F5E6CEFD2B6201D500B38F16 /* LaunchScreen.storyboard */,
-				F5E6CF002B6201D500B38F16 /* Info.plist */,
-				F5E6CF012B6201D500B38F16 /* main.m */,
 			);
 			path = "opengles-brush";
+			sourceTree = "<group>";
+		};
+		F5E6CF102B620C1200B38F16 /* Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				F5E6CF112B620C1200B38F16 /* WhiteAsAlpha.frag */,
+				F5E6CF122B620C1200B38F16 /* Normal.frag */,
+				F5E6CF132B620C1200B38F16 /* NoTexture.frag */,
+				F5E6CF142B620C1200B38F16 /* ForImage.frag */,
+				F5E6CF152B620C1200B38F16 /* DiscardAlphaZero.frag */,
+				F5E6CF162B620C1200B38F16 /* Blur.frag */,
+				F5E6CF172B620C1200B38F16 /* FreeDrawShaderTypes.h */,
+				F5E6CF182B620C1200B38F16 /* Normal.vert */,
+				F5E6CF192B620C1200B38F16 /* Normal.metal */,
+			);
+			path = Shaders;
+			sourceTree = "<group>";
+		};
+		F5E6CF222B620C4F00B38F16 /* Textures */ = {
+			isa = PBXGroup;
+			children = (
+				F5E6CF232B620C4F00B38F16 /* FreeDrawPenGray-2_1.png */,
+				F5E6CF242B620C4F00B38F16 /* FreeDrawPenGray-2_2.png */,
+				F5E6CF252B620C4F00B38F16 /* FreeDrawPenGray-2_16.png */,
+				F5E6CF262B620C4F00B38F16 /* FreeDrawPenGray_32.png */,
+				F5E6CF272B620C4F00B38F16 /* FreeDrawPenGray-2_4.png */,
+				F5E6CF282B620C4F00B38F16 /* FreeDrawPenMono_32.png */,
+				F5E6CF292B620C4F00B38F16 /* FreeDrawPenMono_16.png */,
+				F5E6CF2A2B620C4F00B38F16 /* FreeDrawPenGray_16.png */,
+				F5E6CF2B2B620C4F00B38F16 /* FreeDrawPenGray-2_8.png */,
+				F5E6CF2C2B620C4F00B38F16 /* FreeDrawPenGray-2_32.png */,
+			);
+			path = Textures;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,9 +293,26 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5E6CF362B620C4F00B38F16 /* FreeDrawPenGray-2_32.png in Resources */,
+				F5E6CF1F2B620C1200B38F16 /* Blur.frag in Resources */,
+				F5E6CF1C2B620C1200B38F16 /* NoTexture.frag in Resources */,
+				F5E6CF312B620C4F00B38F16 /* FreeDrawPenGray-2_4.png in Resources */,
+				F5E6CF1D2B620C1200B38F16 /* ForImage.frag in Resources */,
+				F5E6CF202B620C1200B38F16 /* Normal.vert in Resources */,
 				F5E6CEFF2B6201D500B38F16 /* LaunchScreen.storyboard in Resources */,
+				F5E6CF352B620C4F00B38F16 /* FreeDrawPenGray-2_8.png in Resources */,
+				F5E6CF1E2B620C1200B38F16 /* DiscardAlphaZero.frag in Resources */,
+				F5E6CF1B2B620C1200B38F16 /* Normal.frag in Resources */,
 				F5E6CEFC2B6201D500B38F16 /* Assets.xcassets in Resources */,
+				F5E6CF322B620C4F00B38F16 /* FreeDrawPenMono_32.png in Resources */,
+				F5E6CF332B620C4F00B38F16 /* FreeDrawPenMono_16.png in Resources */,
+				F5E6CF2E2B620C4F00B38F16 /* FreeDrawPenGray-2_2.png in Resources */,
+				F5E6CF1A2B620C1200B38F16 /* WhiteAsAlpha.frag in Resources */,
+				F5E6CF342B620C4F00B38F16 /* FreeDrawPenGray_16.png in Resources */,
+				F5E6CF2D2B620C4F00B38F16 /* FreeDrawPenGray-2_1.png in Resources */,
+				F5E6CF2F2B620C4F00B38F16 /* FreeDrawPenGray-2_16.png in Resources */,
 				F5E6CEFA2B6201D300B38F16 /* Main.storyboard in Resources */,
+				F5E6CF302B620C4F00B38F16 /* FreeDrawPenGray_32.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,9 +323,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5B79FAD2B621685004BD866 /* TimeUnit.m in Sources */,
+				F5B79FA12B6215C3004BD866 /* IFreeDrawOperation.m in Sources */,
+				F5B79FB42B621C2E004BD866 /* IFreeDrawViewState.m in Sources */,
 				F5E6CEF72B6201D300B38F16 /* ViewController.m in Sources */,
+				F5B79FB22B621782004BD866 /* NonuniformSpline.cpp in Sources */,
+				F5B79F9E2B62159B004BD866 /* Triangles.cpp in Sources */,
+				F5E6CF0D2B6207D000B38F16 /* ResourceManager.mm in Sources */,
+				F5B79F9D2B62159B004BD866 /* Polyline.cpp in Sources */,
+				F5B79F922B6214F4004BD866 /* DrawingCurveState.mm in Sources */,
 				F5E6CEF12B6201D300B38F16 /* AppDelegate.m in Sources */,
+				F5B79F962B621583004BD866 /* FreeHandCurve.m in Sources */,
+				F5E6CF3D2B620FF800B38F16 /* TapAndPanGestureRecognizer.m in Sources */,
+				F5E6CF392B620F1A00B38F16 /* FreeDrawViewingState.m in Sources */,
+				F5B79FA72B621611004BD866 /* RemoveItemOpe.m in Sources */,
 				F5E6CF022B6201D500B38F16 /* main.m in Sources */,
+				F5E6CF212B620C1200B38F16 /* Normal.metal in Sources */,
+				F5B79FA42B6215E1004BD866 /* IDrawItem.m in Sources */,
+				F5B79FAE2B621685004BD866 /* TimeCalculateType.m in Sources */,
+				F5E6CF0A2B6202AA00B38F16 /* FreeDrawView.mm in Sources */,
+				F5B79F982B621590004BD866 /* InsertItemOpe.m in Sources */,
 				F5E6CEF42B6201D300B38F16 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -299,6 +493,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LM83V6KS3Q;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "opengles-brush/opengles-brush-Prefix.pch";
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "opengles-brush/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -311,6 +508,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = "azun.demo.opengles-brush";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -326,6 +524,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LM83V6KS3Q;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "opengles-brush/opengles-brush-Prefix.pch";
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "opengles-brush/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -338,6 +539,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = "azun.demo.opengles-brush";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

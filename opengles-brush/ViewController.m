@@ -6,17 +6,55 @@
 //
 
 #import "ViewController.h"
+#import "SelectingItemState.h"
+#import "DrawingCurveState.h"
 
 @interface ViewController ()
-
+@property (nonatomic, strong) NSMutableArray<NSNumber *> *colorComponents;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    self.freeDrawView = [[FreeDrawView alloc] initWithFrame:self.view.bounds];
+    self.freeDrawView.delegate = self;
+    
+    [self loadLastFreeDrawViewState];
+    
+    [self.view addSubview:_freeDrawView];
 }
 
+- (void)loadLastFreeDrawViewState {
+    DrawingCurveState *drawingCurveState = [[DrawingCurveState alloc] initWithIsFluorescence:NO];
+    IFreeDrawViewState *state = drawingCurveState;
+    state.view = self.freeDrawView;
+    state.viewController = self;
+    self.freeDrawView.viewState = state;
+    [self.freeDrawView.viewState onBeginState];
+}
 
+#pragma mark - FreeDrawViewDelegate
+- (float)getLineWidth {
+    return 12;
+}
+
+- (NSArray<NSNumber *> *)getColorComponents {
+    NSMutableArray<NSNumber *> *components = @[].mutableCopy;
+    components[0] = @(0);
+    components[1] = @(0);
+    components[2] = @(0);
+    components[3] = @(1);
+    return components;
+}
+
+- (void)handleLongPress:(UILongPressGestureRecognizer *)recognizer {
+    
+}
+
+- (nonnull NSMutableArray<__kindof IDrawItem *> *)getDrawItems {
+    NSMutableArray<IDrawItem *> *items = @[].mutableCopy;
+    return items;
+}
 @end

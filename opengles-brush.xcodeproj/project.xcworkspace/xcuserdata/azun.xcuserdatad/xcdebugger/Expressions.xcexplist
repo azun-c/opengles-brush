@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "-[DrawingCurveState touchesEnded:withEvent:]:DrawingCurveState.mm">
+         <PersistentStrings>
+            <PersistentString
+               value = "_currentPolyline.count() ">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[FreeDrawView setUpGL]:FreeDrawView.mm">
+         <PersistentStrings>
+            <PersistentString
+               value = "glCheckFramebufferStatus(GL_FRAMEBUFFER)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "-[FreeDrawView setUpOnScreen]:FreeDrawView.mm">
+         <PersistentStrings>
+            <PersistentString
+               value = "glCheckFramebufferStatus(GL_FRAMEBUFFER)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
