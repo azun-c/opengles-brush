@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 CIMTOPS CORPORATION. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 @class FreeDrawView;
 
 NS_ASSUME_NONNULL_BEGIN
