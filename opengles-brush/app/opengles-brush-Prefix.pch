@@ -10,27 +10,9 @@
 
 #import <Availability.h>
 
-#ifndef __IPHONE_4_0
-#warning "This project uses features only available in iOS SDK 4.0 and later."
-#endif
-
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
-    #import <MetalKit/MetalKit.h>
     #import <Foundation/Foundation.h>
-    #import <CoreData/CoreData.h>
-//    #import "ObjcLogger.h"
 #endif
-
-#ifdef DEBUG
-#define DLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
-#else
-#define DLog(...)
-#endif
-
-// ALog always displays output regardless of the DEBUG alarm
-#define ALog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
-
-#define SHOULD_USE_METAL 1
 
 #endif /* opengles_brush_Prefix_pch */
