@@ -7,7 +7,6 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
-#import "FreeHandCurve.h"
 
 @class IFreeDrawViewState;
 
@@ -62,8 +61,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) Program m_normalProgram;
 @property (nonatomic, assign) Program m_whiteAsAlphaProgram;
 
-@property (nonatomic, assign) GLuint m_backgroundTexture;
-
 - (void)startAnimation;
 - (void)stopAnimation;
 - (BOOL)isAnimating;
@@ -84,8 +81,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setPenTextureWithWidth:(float)width;
 - (void)useProgram:(ProgramType)type;
 - (void)applyDrawColorRed:(float)r withGreen:(float)g withBlue:(float)b withAlpha:(float)a;
-
-- (BOOL)renderFreeHandCurve:(FreeHandCurve *)item asIndex:(int)index;
 
 - (void)turnOnColorBlending:(BOOL)toTurnOn;
 - (void)blendAlpha;

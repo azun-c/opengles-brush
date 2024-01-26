@@ -10,10 +10,8 @@
 #import <OpenGLES/ES2/glext.h>
 #import "DrawingCurveState.h"
 #import "FreeDrawView.h"
-#import "FreeHandCurve.h"
 #import "Polyline.hpp"
 #import "Triangles.hpp"
-#import "InsertItemOpe.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -67,7 +65,6 @@ NS_ASSUME_NONNULL_BEGIN
         return;
     }
     
-//    [self.view blendAlpha];
     glBlendEquation(GL_MAX_EXT);
     
     [self renderTriangles];

@@ -13,20 +13,9 @@
 
 #import "IResourceManager.hpp"
 
-// indexをfloatのRGBカラーに変換する
-void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
-    int redElement = index & 0x000000FF;
-    int greenElement = (index >> 8) & 0x000000FF;
-    int blueElement = (index >> 16) & 0x000000FF;
-    *pRed = (float)redElement/255;
-    *pGreen = (float)greenElement/255;
-    *pBlue = (float)blueElement/255;
-}
-
 @interface FreeDrawView ()
 
 @property (nonatomic, strong) CADisplayLink * __nullable displayLink;
-@property (nonatomic, assign) NSUInteger pointCounter;
 
 @end
 
@@ -100,33 +89,35 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
     
     [self setUpFBOs];
     
-    // 前面用のFBO
-//    [self clearFrameBuffer:_m_forMove.framebuffer withRed:1.0f green:1.0f blue:1.0f alpha:0.0f];
-    
     // プログラム
     [self setUpProgram];
     [self useProgram:ProgramTypeWhiteAsAlphaProgram];
     
-    // ペンのテクスチャを作成
-    _m_penGray_2_32 = [self createTexture:@"FreeDrawPenGray-2_32.png" withFormat:GL_RGBA];
-    _m_penGray_2_16 = [self createTexture:@"FreeDrawPenGray-2_16.png" withFormat:GL_RGBA];
-    _m_penGray_16 = [self createTexture:@"FreeDrawPenGray_16.png" withFormat:GL_RGBA];
-    _m_penGray_32 = [self createTexture:@"FreeDrawPenGray_32.png" withFormat:GL_RGBA];
+    [self setupPenTextures];
     
-    // 背景用のテクスチャはとりあえず0で初期化
-    _m_backgroundTexture = 0;
+    [self setupDefaultPenColor];
     
+    // 初期化
+    [self initializeLayers];
+    
+    return YES;
+}
+
+-(void)setupDefaultPenColor {
     // 描画色設定
     _m_drawColor = @[].mutableCopy;
     _m_drawColor[0] = @1.0f;
     _m_drawColor[1] = @0.0f;
     _m_drawColor[2] = @0.0f;
     _m_drawColor[3] = @1.0f;
-    
-    // 初期化
-    [self initializeLayers];
-    
-    return YES;
+}
+
+-(void)setupPenTextures {
+    // ペンのテクスチャを作成
+    _m_penGray_2_32 = [self createTexture:@"FreeDrawPenGray-2_32.png" withFormat:GL_RGBA];
+    _m_penGray_2_16 = [self createTexture:@"FreeDrawPenGray-2_16.png" withFormat:GL_RGBA];
+    _m_penGray_16 = [self createTexture:@"FreeDrawPenGray_16.png" withFormat:GL_RGBA];
+    _m_penGray_32 = [self createTexture:@"FreeDrawPenGray_32.png" withFormat:GL_RGBA];
 }
 
 - (void) turnOnColorBlending:(BOOL)toTurnOn {
@@ -171,26 +162,11 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
     [self setUpFBO:_m_offScreen];
     // 描画済み保持用FBO
     [self setUpFBO:_m_finished];
-    // セレクション用のFBO
-//    [self setUpFBO:_m_forSelection];
-    // 前面用のFBO
-//    [self setUpFBO:_m_forMove];
-    // 画像生成用のFBO
-//    [self setUpFBO:_m_forAccumulate];
 }
 
 - (void)setUpFBO:(FBO&)fbo {
-    glGenFramebuffers(1, &fbo.framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo.framebuffer);
-    
-    glGenTextures(1, &fbo.texture);
-    glBindTexture(GL_TEXTURE_2D, fbo.texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.bounds.size.width*_m_scaleFactor, self.bounds.size.height*_m_scaleFactor, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo.texture, 0);
+    [self setupFrameBufferFor:fbo];
+    [self setupTextureFor:fbo];
     
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         NSLog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
@@ -199,6 +175,25 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
     }
 }
 
+-(void)setupTextureFor:(FBO&)fbo {
+    glGenTextures(1, &fbo.texture);
+    glBindTexture(GL_TEXTURE_2D, fbo.texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+                 self.bounds.size.width*_m_scaleFactor,
+                 self.bounds.size.height*_m_scaleFactor,
+                 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo.texture, 0);
+}
+
+-(void)setupFrameBufferFor:(FBO&)fbo {
+    glGenFramebuffers(1, &fbo.framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo.framebuffer);
+}
 
 - (void)clearFrameBuffer:(GLuint)framebuffer withRed:(float)r green:(float)g blue:(float)b alpha:(float)a {
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
@@ -208,18 +203,13 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
 }
 
 - (void)setUpProgram {
-    _m_normalProgram.name = [self createProgramWithVertexShaderSource:@"Normal.vert" withFragmentShader:@"Normal.frag"];
+    _m_normalProgram.name = [self createProgramWithVertexShaderSource:@"Normal.vert" 
+                                                   withFragmentShader:@"Normal.frag"];
     [self initializeProgram:&_m_normalProgram];
-    _m_whiteAsAlphaProgram.name = [self createProgramWithVertexShaderSource:@"Normal.vert" withFragmentShader:@"WhiteAsAlpha.frag"];
+    
+    _m_whiteAsAlphaProgram.name = [self createProgramWithVertexShaderSource:@"Normal.vert" 
+                                                         withFragmentShader:@"WhiteAsAlpha.frag"];
     [self initializeProgram:&_m_whiteAsAlphaProgram];
-//    _m_discardAlphaZeroProgram.name = [self createProgramWithVertexShaderSource:@"Normal.vert" withFragmentShader:@"DiscardAlphaZero.frag"];
-//    [self initializeProgram:&_m_discardAlphaZeroProgram];
-//    _m_noTextureProgram.name = [self createProgramWithVertexShaderSource:@"Normal.vert" withFragmentShader:@"NoTexture.frag"];
-//    [self initializeProgram:&_m_noTextureProgram];
-//    _m_forImageProgram.name = [self createProgramWithVertexShaderSource:@"Normal.vert" withFragmentShader:@"ForImage.frag"];
-//    [self initializeProgram:&_m_forImageProgram];
-//    _m_blurProgram.name = [self createProgramWithVertexShaderSource:@"Normal.vert" withFragmentShader:@"Blur.frag"];
-//    [self initializeProgram:&_m_blurProgram];
 }
 
 - (GLuint)createShader:(NSString *)filename withType:(GLenum)shaderType {
@@ -288,18 +278,6 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
         case ProgramTypeWhiteAsAlphaProgram:
             _m_pProgram = &_m_whiteAsAlphaProgram;
             break;
-//        case ProgramTypeDiscardAlphaZero:
-//            _m_pProgram = &_m_discardAlphaZeroProgram;
-//            break;
-//        case ProgramTypeNoTexture:
-//            _m_pProgram = &_m_noTextureProgram;
-//            break;
-//        case ProgramTypeForImage:
-//            _m_pProgram = &_m_forImageProgram;
-//            break;
-//        case ProgramTypeBlur:
-//            _m_pProgram = &_m_blurProgram;
-//            break;
         default:
             assert(NO);
             break;
@@ -389,16 +367,9 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
     // 記入済みレイヤを透明色でクリア
     [self clearFrameBuffer:_m_finished.framebuffer withRed:1.0f green:1.0f blue:1.0f alpha:0.0f];
     
-    // 選択バッファを黒でクリア
-//    [self clearFrameBuffer:_m_forSelection.framebuffer withRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
-    
     // ピューポートを設定
-    glViewport(0, 0, self.bounds.size.width*_m_scaleFactor, self.bounds.size.height*_m_scaleFactor);
-}
-
-
-- (BOOL)renderFreeHandCurve:(FreeHandCurve *)item asIndex:(int)index {
-    return YES;
+    glViewport(0, 0, self.bounds.size.width*_m_scaleFactor, 
+               self.bounds.size.height*_m_scaleFactor);
 }
 
 - (void)applyDrawColorRed:(float)r withGreen:(float)g withBlue:(float)b withAlpha:(float)a {
@@ -474,16 +445,10 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(nullable UIEvent *)event {
-    ++self.pointCounter;
     [self.viewState touchesMoved:touches withEvent:event];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(nullable UIEvent *)event {
-    UITouch *touch = [touches anyObject];
-    if (touch.tapCount == 2) {
-//        [self handleTap:touches];
-    }
-    
     [self.viewState touchesEnded:touches withEvent:event];
 }
 
