@@ -7,7 +7,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 
-@class IFreeDrawViewState;
+@class BaseViewState;
 
 typedef struct ColorBuffer {
     GLuint framebuffer;
@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface FreeDrawView : UIView
 @property (nonatomic, strong, nullable) EAGLContext *m_context;
 @property (nonatomic, strong) NSMutableArray<NSNumber *> *m_drawColor;
-@property (nonatomic, strong) IFreeDrawViewState * __nullable viewState;
+@property (nonatomic, strong) BaseViewState * __nullable viewState;
 
 @property (nonatomic, assign) float m_scaleFactor; // [UIScreen mainScreen].scale
 @property (nonatomic, assign) GLuint m_penGray_2_32;
@@ -61,8 +61,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) Program m_whiteAsAlphaProgram;
 
 - (void)startAnimation;
-- (void)stopAnimation;
-- (BOOL)isAnimating;
 
 - (void)drawView:(nullable CADisplayLink *)displayLink;
 

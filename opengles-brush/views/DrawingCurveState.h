@@ -6,11 +6,11 @@
 //  Copyright (c) 2012 CIMTOPS CORPORATION. All rights reserved.
 //
 
-#import "IFreeDrawViewState.h"
+#import "BaseViewState.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DrawingCurveState : IFreeDrawViewState
+@interface DrawingCurveState : BaseViewState
 
 @end
 NS_ASSUME_NONNULL_END

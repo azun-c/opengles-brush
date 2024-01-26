@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface IFreeDrawViewState : NSObject 
+@interface BaseViewState : NSObject 
 
 @property (nonatomic, weak) FreeDrawView *view;
 

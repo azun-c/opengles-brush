@@ -68,15 +68,6 @@
     [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
-- (void)stopAnimation {
-    [self.displayLink invalidate];
-    self.displayLink = nil;
-}
-
-- (BOOL)isAnimating {
-    return (self.displayLink != nil);
-}
-
 - (BOOL)setUpGL {
     self.m_context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     if (!_m_context || ![EAGLContext setCurrentContext:_m_context]) {

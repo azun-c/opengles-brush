@@ -15,7 +15,7 @@
     
     FreeDrawView *freeDrawView = [[FreeDrawView alloc] initWithFrame:self.view.bounds];
     
-    IFreeDrawViewState *state = [[DrawingCurveState alloc] init];
+    BaseViewState *state = [[DrawingCurveState alloc] init];
     state.view = freeDrawView;
     freeDrawView.viewState = state;
     [state onBeginState];

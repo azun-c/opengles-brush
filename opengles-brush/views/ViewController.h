@@ -9,6 +9,5 @@
 
 @interface ViewController : UIViewController
 
-@property (nonatomic, strong, nullable) FreeDrawView *freeDrawView;
 @end
 

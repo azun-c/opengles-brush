@@ -28,12 +28,6 @@ NS_ASSUME_NONNULL_BEGIN
     _currentPolyline.m_points.reserve(1000);
 }
 
-- (void)onEndState {
-    // アニメーション終了
-    _currentPolyline.m_points.clear();
-    [self.view stopAnimation];
-}
-
 - (void)onRender {    
     [self.view drawBegin];
     
