@@ -8,7 +8,7 @@
 #import <UIKit/UIKit.h>
 #import "FreeDrawView.h"
 
-@interface ViewController : UIViewController<FreeDrawViewDelegate>
+@interface ViewController : UIViewController
 
 @property (nonatomic, strong, nullable) FreeDrawView *freeDrawView;
 @end

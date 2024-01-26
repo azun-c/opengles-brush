@@ -47,7 +47,6 @@
 		F5E6CF352B620C4F00B38F16 /* FreeDrawPenGray-2_8.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF2B2B620C4F00B38F16 /* FreeDrawPenGray-2_8.png */; };
 		F5E6CF362B620C4F00B38F16 /* FreeDrawPenGray-2_32.png in Resources */ = {isa = PBXBuildFile; fileRef = F5E6CF2C2B620C4F00B38F16 /* FreeDrawPenGray-2_32.png */; };
 		F5E6CF392B620F1A00B38F16 /* FreeDrawViewingState.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E6CF382B620F1A00B38F16 /* FreeDrawViewingState.m */; };
-		F5E6CF3D2B620FF800B38F16 /* TapAndPanGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E6CF3C2B620FF800B38F16 /* TapAndPanGestureRecognizer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -116,8 +115,6 @@
 		F5E6CF372B620F1A00B38F16 /* IFreeDrawViewState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFreeDrawViewState.h; sourceTree = "<group>"; };
 		F5E6CF382B620F1A00B38F16 /* FreeDrawViewingState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FreeDrawViewingState.m; sourceTree = "<group>"; };
 		F5E6CF3A2B620F8300B38F16 /* FreeDrawViewingState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeDrawViewingState.h; sourceTree = "<group>"; };
-		F5E6CF3B2B620FF800B38F16 /* TapAndPanGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TapAndPanGestureRecognizer.h; sourceTree = "<group>"; };
-		F5E6CF3C2B620FF800B38F16 /* TapAndPanGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TapAndPanGestureRecognizer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,8 +183,6 @@
 				F5E6CEF22B6201D300B38F16 /* SceneDelegate.h */,
 				F5E6CEF32B6201D300B38F16 /* SceneDelegate.m */,
 				F5E6CF102B620C1200B38F16 /* Shaders */,
-				F5E6CF3B2B620FF800B38F16 /* TapAndPanGestureRecognizer.h */,
-				F5E6CF3C2B620FF800B38F16 /* TapAndPanGestureRecognizer.m */,
 				F5E6CF222B620C4F00B38F16 /* Textures */,
 				F5B79FAC2B621685004BD866 /* TimeCalculateType.h */,
 				F5B79FAB2B621685004BD866 /* TimeCalculateType.m */,
@@ -334,7 +329,6 @@
 				F5B79F922B6214F4004BD866 /* DrawingCurveState.mm in Sources */,
 				F5E6CEF12B6201D300B38F16 /* AppDelegate.m in Sources */,
 				F5B79F962B621583004BD866 /* FreeHandCurve.m in Sources */,
-				F5E6CF3D2B620FF800B38F16 /* TapAndPanGestureRecognizer.m in Sources */,
 				F5E6CF392B620F1A00B38F16 /* FreeDrawViewingState.m in Sources */,
 				F5B79FA72B621611004BD866 /* RemoveItemOpe.m in Sources */,
 				F5E6CF022B6201D500B38F16 /* main.m in Sources */,

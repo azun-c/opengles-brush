@@ -15,24 +15,14 @@
 #import "Triangles.hpp"
 #import "InsertItemOpe.h"
 
-static const float kAlphaForFluorescence = 0.5; // 蛍光ペン透明度
-
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DrawingCurveState ()
 // 描画折れ線
 @property (nonatomic, assign) Polyline currentPolyline;
-@property (nonatomic, assign) BOOL isFluorescence;
 @end
 
 @implementation DrawingCurveState
-
-- (id)initWithIsFluorescence:(BOOL)fluorescene {
-    if (self = [super init]) {
-        _isFluorescence = fluorescene;
-    }
-    return self;
-}
 
 - (void)onBeginState {
     // アニメーションスタート
@@ -50,8 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
     [self.view drawBegin];
     
     [self renderCurveOnOffscreen];
-    [self.view renderFinishedToOnScreen];
-    [self.view renderOffscreenToOnscreen];
+    [self.view renderFinishedTextureToOnScreen];
+    [self.view renderOffscreenTextureToOnscreen];
     
     [self.view drawEnd];
 }
@@ -60,8 +50,8 @@ NS_ASSUME_NONNULL_BEGIN
     [self.view drawBegin];
     
     [self renderCurveOnOffscreen];
-    [self.view renderToFinished]; // <----
-    [self.view renderFinishedToOnScreen];
+    [self.view renderOffscreenTextureToFinished]; // <----
+    [self.view renderFinishedTextureToOnScreen];
     
     [self.view drawEnd];
 }
@@ -93,16 +83,16 @@ NS_ASSUME_NONNULL_BEGIN
 
     // pass triangle points to `positionAttrib` (shader attribute: `Position`)
     glVertexAttribPointer(self.view.m_pProgram->positionAttrib, 2, GL_FLOAT, GL_FALSE,
-                          sizeof(Vertex), tris.ptrToPoints());CHECK_GL_ERROR();
+                          sizeof(Vertex), tris.ptrToPoints());
     // pass triangle texture coord to `texCodAttrib` (shader attribute: `TextureCoord`)
     glVertexAttribPointer(self.view.m_pProgram->texCodAttrib, 2, GL_FLOAT, GL_FALSE,
-                          sizeof(Vertex), tris.ptrToTexCod());CHECK_GL_ERROR();
-    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)(3*tris.m_triangles.size()));CHECK_GL_ERROR();
+                          sizeof(Vertex), tris.ptrToTexCod());
+    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)(3*tris.m_triangles.size()));
 }
 
 -(Triangles)generateTriangles {
     // 太さ取得
-    float curveWidth = [self.view.delegate getLineWidth];
+    float curveWidth = 12.0f;
     
     // ペン先設定
     [self.view setPenTextureWithWidth:curveWidth];
@@ -147,28 +137,7 @@ NS_ASSUME_NONNULL_BEGIN
     _currentPolyline.addPoint(vec2(point.x, point.y));
     // workaround: 1 point won't show on screen
     _currentPolyline.addPoint(vec2(point.x + 0.03, point.y + 0.03));
-    
-    // 画面描画更新 - Screen drawing update
-//    // render selection
-////    int name = (int)[self.view.delegate getDrawItems].count;
-////    [self.view renderOffScreenToSelectionWithName:name];
-//    // end render selection
     [self onRenderFinished];
-    
-    // undo/redo
-//    float *dataBegin = &(_currentPolyline.m_points.front().x);
-//    FreeHandCurve *freeHandCurve = [[FreeHandCurve alloc] initWithPoints:(int)_currentPolyline.m_points.size() withData:dataBegin];
-//    freeHandCurve.lineWidth = [self.view.delegate getLineWidth];
-//
-//    freeHandCurve.red = colorComp[0].floatValue;
-//    freeHandCurve.green = colorComp[1].floatValue;
-//    freeHandCurve.blue = colorComp[2].floatValue;
-//    freeHandCurve.alpha = (_isFluorescence) ? kAlphaForFluorescence:colorComp[3].floatValue;
-//    InsertItemOpe *ope = [[InsertItemOpe alloc] initWithItems:self.viewController.drawItems
-//                                                  insertItems:freeHandCurve
-//                                                  insertIndex:self.viewController.drawItems.count];
-//    [self.viewController executeOperation:ope];
-//    
     _currentPolyline.m_points.clear();
 }
 
@@ -176,18 +145,6 @@ NS_ASSUME_NONNULL_BEGIN
     // マルチタッチでキャンセルされた時
     if ([event allTouches].count > 1) {
         _currentPolyline.m_points.clear();
-    }
-}
-
-- (BOOL)fluorescene {
-    return _isFluorescence;
-}
-
-- (FreeDrawViewStateType)stateType {
-    if (_isFluorescence) {
-        return FreeDrawViewStateTypeFluorescencePen;
-    } else {
-        return FreeDrawViewStateTypePen;
     }
 }
 

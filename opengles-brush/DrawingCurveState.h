@@ -12,9 +12,5 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DrawingCurveState : IFreeDrawViewState
 
-- (id)initWithIsFluorescence:(BOOL)fluorescene;
-
-@property (nonatomic, readonly) BOOL fluorescene;
-
 @end
 NS_ASSUME_NONNULL_END

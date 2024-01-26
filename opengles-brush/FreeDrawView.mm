@@ -95,6 +95,7 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
     }
     
     // オンスクリーンフレームバッファとレンダーバッファ
+    // Onscreen framebuffer and renderbuffer
     [self setUpOnScreen];
     
     [self setUpFBOs];
@@ -109,11 +110,8 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
     // ペンのテクスチャを作成
     _m_penGray_2_32 = [self createTexture:@"FreeDrawPenGray-2_32.png" withFormat:GL_RGBA];
     _m_penGray_2_16 = [self createTexture:@"FreeDrawPenGray-2_16.png" withFormat:GL_RGBA];
-    _m_penGray_2_8 = [self createTexture:@"FreeDrawPenGray-2_8.png" withFormat:GL_RGBA];
-    _m_penGray_32 = [self createTexture:@"FreeDrawPenGray_32.png" withFormat:GL_RGBA];
     _m_penGray_16 = [self createTexture:@"FreeDrawPenGray_16.png" withFormat:GL_RGBA];
-    _m_penMono_32 = [self createTexture:@"FreeDrawPenMono_32.png" withFormat:GL_RGBA];
-    _m_penMono_16 = [self createTexture:@"FreeDrawPenMono_16.png" withFormat:GL_RGBA];
+    _m_penGray_32 = [self createTexture:@"FreeDrawPenGray_32.png" withFormat:GL_RGBA];
     
     // 背景用のテクスチャはとりあえず0で初期化
     _m_backgroundTexture = 0;
@@ -133,25 +131,33 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
 
 - (void) turnOnColorBlending:(BOOL)toTurnOn {
     if (toTurnOn) {
-        glEnable(GL_BLEND);CHECK_GL_ERROR();
+        glEnable(GL_BLEND);
     }
     else {
-        glDisable(GL_BLEND);CHECK_GL_ERROR();
+        glDisable(GL_BLEND);
     }
 }
 
 - (void) blendAlpha {
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);CHECK_GL_ERROR();
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 - (void)setUpOnScreen {
-    glGenFramebuffers(1, &_m_onScreen.framebuffer);CHECK_GL_ERROR();
-    glBindFramebuffer(GL_FRAMEBUFFER, _m_onScreen.framebuffer);CHECK_GL_ERROR();
+    // create onScreen's FrameBuffer
+    glGenFramebuffers(1, &_m_onScreen.framebuffer);
+    // bind onScreen's FrameBuffer to GL_FRAMEBUFFER
+    glBindFramebuffer(GL_FRAMEBUFFER, _m_onScreen.framebuffer);
     
-    glGenRenderbuffers(1, &_m_onScreen.renderbuffer);CHECK_GL_ERROR();
-    glBindRenderbuffer(GL_RENDERBUFFER, _m_onScreen.renderbuffer);CHECK_GL_ERROR();
+    // create onScreen's RenderBuffer
+    glGenRenderbuffers(1, &_m_onScreen.renderbuffer);
+    // bind onScreen's RenderBuffer to GL_RENDERBUFFER
+    glBindRenderbuffer(GL_RENDERBUFFER, _m_onScreen.renderbuffer);
+    
+    // binds drawable object’s storage to the renderbuffer object.
     [_m_context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer *)super.layer];
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _m_onScreen.renderbuffer);CHECK_GL_ERROR();
+    
+    // attach the RenderBuffer as a logical buffer of a FrameBuffer object
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _m_onScreen.renderbuffer);
     
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         NSLog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
@@ -174,17 +180,17 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
 }
 
 - (void)setUpFBO:(FBO&)fbo {
-    glGenFramebuffers(1, &fbo.framebuffer);CHECK_GL_ERROR();
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo.framebuffer);CHECK_GL_ERROR();
+    glGenFramebuffers(1, &fbo.framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo.framebuffer);
     
-    glGenTextures(1, &fbo.texture);CHECK_GL_ERROR();
-    glBindTexture(GL_TEXTURE_2D, fbo.texture);CHECK_GL_ERROR();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);CHECK_GL_ERROR();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);CHECK_GL_ERROR();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);CHECK_GL_ERROR();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);CHECK_GL_ERROR();
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.bounds.size.width*_m_scaleFactor, self.bounds.size.height*_m_scaleFactor, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);CHECK_GL_ERROR();
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo.texture, 0);CHECK_GL_ERROR();
+    glGenTextures(1, &fbo.texture);
+    glBindTexture(GL_TEXTURE_2D, fbo.texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self.bounds.size.width*_m_scaleFactor, self.bounds.size.height*_m_scaleFactor, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo.texture, 0);
     
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         NSLog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
@@ -206,14 +212,14 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
     [self initializeProgram:&_m_normalProgram];
     _m_whiteAsAlphaProgram.name = [self createProgramWithVertexShaderSource:@"Normal.vert" withFragmentShader:@"WhiteAsAlpha.frag"];
     [self initializeProgram:&_m_whiteAsAlphaProgram];
-    _m_discardAlphaZeroProgram.name = [self createProgramWithVertexShaderSource:@"Normal.vert" withFragmentShader:@"DiscardAlphaZero.frag"];
-    [self initializeProgram:&_m_discardAlphaZeroProgram];
-    _m_noTextureProgram.name = [self createProgramWithVertexShaderSource:@"Normal.vert" withFragmentShader:@"NoTexture.frag"];
-    [self initializeProgram:&_m_noTextureProgram];
-    _m_forImageProgram.name = [self createProgramWithVertexShaderSource:@"Normal.vert" withFragmentShader:@"ForImage.frag"];
-    [self initializeProgram:&_m_forImageProgram];
-    _m_blurProgram.name = [self createProgramWithVertexShaderSource:@"Normal.vert" withFragmentShader:@"Blur.frag"];
-    [self initializeProgram:&_m_blurProgram];
+//    _m_discardAlphaZeroProgram.name = [self createProgramWithVertexShaderSource:@"Normal.vert" withFragmentShader:@"DiscardAlphaZero.frag"];
+//    [self initializeProgram:&_m_discardAlphaZeroProgram];
+//    _m_noTextureProgram.name = [self createProgramWithVertexShaderSource:@"Normal.vert" withFragmentShader:@"NoTexture.frag"];
+//    [self initializeProgram:&_m_noTextureProgram];
+//    _m_forImageProgram.name = [self createProgramWithVertexShaderSource:@"Normal.vert" withFragmentShader:@"ForImage.frag"];
+//    [self initializeProgram:&_m_forImageProgram];
+//    _m_blurProgram.name = [self createProgramWithVertexShaderSource:@"Normal.vert" withFragmentShader:@"Blur.frag"];
+//    [self initializeProgram:&_m_blurProgram];
 }
 
 - (GLuint)createShader:(NSString *)filename withType:(GLenum)shaderType {
@@ -263,15 +269,15 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
 }
 
 - (void)initializeProgram:(Program *)pProgram {
-    pProgram->positionAttrib = glGetAttribLocation(pProgram->name, "Position");CHECK_GL_ERROR();
-    pProgram->texCodAttrib = glGetAttribLocation(pProgram->name, "TextureCoord");CHECK_GL_ERROR();
-    pProgram->drawColorUniform = glGetUniformLocation(pProgram->name, "DrawColor");CHECK_GL_ERROR();
-    pProgram->projectionUniform = glGetUniformLocation(pProgram->name, "Projection");CHECK_GL_ERROR();
-    pProgram->modelviewUniform = glGetUniformLocation(pProgram->name, "Modelview");CHECK_GL_ERROR();
+    pProgram->positionAttrib = glGetAttribLocation(pProgram->name, "Position");
+    pProgram->texCodAttrib = glGetAttribLocation(pProgram->name, "TextureCoord");
+    pProgram->drawColorUniform = glGetUniformLocation(pProgram->name, "DrawColor");
+    pProgram->projectionUniform = glGetUniformLocation(pProgram->name, "Projection");
+    pProgram->modelviewUniform = glGetUniformLocation(pProgram->name, "Modelview");
     
-    pProgram->pixelTex = glGetUniformLocation(pProgram->name, "PixelTex");CHECK_GL_ERROR();
-    pProgram->sampler0Uniform = glGetUniformLocation(pProgram->name, "Sampler0");CHECK_GL_ERROR();
-    pProgram->sampler1Uniform = glGetUniformLocation(pProgram->name, "Sampler1");CHECK_GL_ERROR();
+    pProgram->pixelTex = glGetUniformLocation(pProgram->name, "PixelTex");
+    pProgram->sampler0Uniform = glGetUniformLocation(pProgram->name, "Sampler0");
+    pProgram->sampler1Uniform = glGetUniformLocation(pProgram->name, "Sampler1");
 }
 
 - (void)useProgram:(ProgramType)type {
@@ -282,18 +288,18 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
         case ProgramTypeWhiteAsAlphaProgram:
             _m_pProgram = &_m_whiteAsAlphaProgram;
             break;
-        case ProgramTypeDiscardAlphaZero:
-            _m_pProgram = &_m_discardAlphaZeroProgram;
-            break;
-        case ProgramTypeNoTexture:
-            _m_pProgram = &_m_noTextureProgram;
-            break;
-        case ProgramTypeForImage:
-            _m_pProgram = &_m_forImageProgram;
-            break;
-        case ProgramTypeBlur:
-            _m_pProgram = &_m_blurProgram;
-            break;
+//        case ProgramTypeDiscardAlphaZero:
+//            _m_pProgram = &_m_discardAlphaZeroProgram;
+//            break;
+//        case ProgramTypeNoTexture:
+//            _m_pProgram = &_m_noTextureProgram;
+//            break;
+//        case ProgramTypeForImage:
+//            _m_pProgram = &_m_forImageProgram;
+//            break;
+//        case ProgramTypeBlur:
+//            _m_pProgram = &_m_blurProgram;
+//            break;
         default:
             assert(NO);
             break;
@@ -313,7 +319,7 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
         0, 0, 0, 1
     };
     
-    glUniformMatrix4fv(pProgram->modelviewUniform, 1, GL_FALSE, &modelview[0]);CHECK_GL_ERROR();
+    glUniformMatrix4fv(pProgram->modelviewUniform, 1, GL_FALSE, &modelview[0]);
 }
 
 - (void)setProjection:(Program *)pProgram {
@@ -327,25 +333,25 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
         -1,  1,  0,  1
     };
     
-    glUniformMatrix4fv(pProgram->projectionUniform, 1, GL_FALSE, &ortho[0]);CHECK_GL_ERROR();
+    glUniformMatrix4fv(pProgram->projectionUniform, 1, GL_FALSE, &ortho[0]);
 }
 
 - (void)setPixelTex:(Program *)pProgaram {
     GLfloat dx = 1.0/self.bounds.size.width;
     GLfloat dy = 1.0/self.bounds.size.height;
-    glUniform2f(pProgaram->pixelTex, dx, dy);CHECK_GL_ERROR();
+    glUniform2f(pProgaram->pixelTex, dx, dy);
 }
 
 - (void)setSampler:(Program *)pProgram {
-    glUniform1i(pProgram->sampler0Uniform, 0);CHECK_GL_ERROR();
-    glUniform1i(pProgram->sampler1Uniform, 1);CHECK_GL_ERROR();
+    glUniform1i(pProgram->sampler0Uniform, 0);
+    glUniform1i(pProgram->sampler1Uniform, 1);
 }
 
 - (GLuint)createTexture:(NSString *)filename withFormat:(GLint)format {
     GLenum texelFormat = GL_UNSIGNED_BYTE;
     GLuint texture;
-    glGenTextures(1, &texture);CHECK_GL_ERROR();
-    glBindTexture(GL_TEXTURE_2D, texture);CHECK_GL_ERROR();
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
     
     IResourceManager *resourceManager = CreateResourceManager();
 
@@ -357,23 +363,23 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
 
     delete resourceManager;
     
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);CHECK_GL_ERROR();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);CHECK_GL_ERROR();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);CHECK_GL_ERROR();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);CHECK_GL_ERROR();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     
     return texture;
 }
 
 - (void)setPenTextureWithWidth:(float)width {
     if (width > 24.0f) {
-        glBindTexture(GL_TEXTURE_2D, self.m_penGray_32);CHECK_GL_ERROR();
+        glBindTexture(GL_TEXTURE_2D, self.m_penGray_32);
     } else if (width > 12.0f) {
-        glBindTexture(GL_TEXTURE_2D, self.m_penGray_16);CHECK_GL_ERROR();
+        glBindTexture(GL_TEXTURE_2D, self.m_penGray_16);
     } else if (width > 6.0f) {
-        glBindTexture(GL_TEXTURE_2D, self.m_penGray_2_32);CHECK_GL_ERROR();
+        glBindTexture(GL_TEXTURE_2D, self.m_penGray_2_32);
     } else {
-        glBindTexture(GL_TEXTURE_2D, self.m_penGray_2_16);CHECK_GL_ERROR();
+        glBindTexture(GL_TEXTURE_2D, self.m_penGray_2_16);
     }
 }
 
@@ -396,22 +402,22 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
 }
 
 - (void)applyDrawColorRed:(float)r withGreen:(float)g withBlue:(float)b withAlpha:(float)a {
-    glUniform4f(_m_pProgram->drawColorUniform, r, g, b, a);CHECK_GL_ERROR();
+    glUniform4f(_m_pProgram->drawColorUniform, r, g, b, a);
 }
 
 - (void)drawBegin {
-    glEnableVertexAttribArray(_m_pProgram->positionAttrib);CHECK_GL_ERROR();
-    glEnableVertexAttribArray(_m_pProgram->texCodAttrib);CHECK_GL_ERROR();
+    glEnableVertexAttribArray(_m_pProgram->positionAttrib);
+    glEnableVertexAttribArray(_m_pProgram->texCodAttrib);
 }
 
 - (void)drawEnd {
-    glDisableVertexAttribArray(_m_pProgram->positionAttrib);CHECK_GL_ERROR();
-    glDisableVertexAttribArray(_m_pProgram->texCodAttrib);CHECK_GL_ERROR();
+    glDisableVertexAttribArray(_m_pProgram->positionAttrib);
+    glDisableVertexAttribArray(_m_pProgram->texCodAttrib);
 }
 
 - (void)drawTexture:(GLuint)texture toFramebuffer:(GLuint)framebuffer {
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);CHECK_GL_ERROR();
-    glBindTexture(GL_TEXTURE_2D, texture);CHECK_GL_ERROR();
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glBindTexture(GL_TEXTURE_2D, texture);
     
     float positionTexCod[] = {
         0.0, 0.0,
@@ -425,13 +431,13 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
         1.0, 0.0
     };
     
-    glVertexAttribPointer(_m_pProgram->positionAttrib, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), positionTexCod);CHECK_GL_ERROR();
-    glVertexAttribPointer(_m_pProgram->texCodAttrib, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), positionTexCod + 2);CHECK_GL_ERROR();
+    glVertexAttribPointer(_m_pProgram->positionAttrib, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), positionTexCod);
+    glVertexAttribPointer(_m_pProgram->texCodAttrib, 2, GL_FLOAT, GL_FALSE, 4*sizeof(float), positionTexCod + 2);
     
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);CHECK_GL_ERROR();
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
-- (void)renderToFinished {
+- (void)renderOffscreenTextureToFinished {
     [self useProgram:ProgramTypeWhiteAsAlphaProgram];
     [self applyDrawColorRed:_m_drawColor[0].floatValue
                   withGreen:_m_drawColor[1].floatValue
@@ -441,16 +447,16 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
     [self drawTexture:_m_offScreen.texture toFramebuffer:_m_finished.framebuffer];
 }
 
-- (void)renderFinishedToOnScreen {
+- (void)renderFinishedTextureToOnScreen {
     // 記入済みレイヤをオンスクリーンにブレンドせずに描画
     // Draw filled layers onscreen without blending
     [self turnOnColorBlending:NO];
     [self useProgram:ProgramTypeNormalProgram];
-    [self drawTexture:_m_finished.texture toFramebuffer:_m_onScreen.framebuffer];CHECK_GL_ERROR();
+    [self drawTexture:_m_finished.texture toFramebuffer:_m_onScreen.framebuffer];
     [self turnOnColorBlending:YES];
 }
 
-- (void)renderOffscreenToOnscreen {
+- (void)renderOffscreenTextureToOnscreen {
     // オフスクリーンをオンスクリーンに描画
     // Draw offscreen to onscreen
     [self useProgram:ProgramTypeWhiteAsAlphaProgram];

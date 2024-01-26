@@ -15,19 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)onBeginState {
 }
 
-- (void)onEndState {
-}
-
 - (void)onRender {    
-}
-
-- (void)onDidShowKeyboard {
-}
-
-- (void)onWillHideKeyboard {
-}
-
-- (void)onDidHideKeyboard {
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -40,16 +28,6 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-}
-
-- (void)doubleTapped:(CGPoint)point {
-}
-
-- (void)endEditingText {
-}
-
-- (FreeDrawViewStateType)stateType {
-    return FreeDrawViewStateTypeUnknown;
 }
 
 @end
