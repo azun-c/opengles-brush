@@ -123,7 +123,7 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
     _m_drawColor[0] = @1.0f;
     _m_drawColor[1] = @0.0f;
     _m_drawColor[2] = @0.0f;
-    _m_drawColor[3] = @0.5f;
+    _m_drawColor[3] = @1.0f;
     
     // 初期化
     [self initializeLayers];
@@ -394,9 +394,6 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
 - (BOOL)renderFreeHandCurve:(FreeHandCurve *)item asIndex:(int)index {
     return YES;
 }
-- (void)renderFreeHandCurveForSelection:(FreeHandCurve *)item {
-    
-}
 
 - (void)applyDrawColorRed:(float)r withGreen:(float)g withBlue:(float)b withAlpha:(float)a {
     glUniform4f(_m_pProgram->drawColorUniform, r, g, b, a);CHECK_GL_ERROR();
@@ -451,7 +448,6 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
     [self useProgram:ProgramTypeNormalProgram];
     [self drawTexture:_m_finished.texture toFramebuffer:_m_onScreen.framebuffer];CHECK_GL_ERROR();
     [self turnOnColorBlending:YES];
-    
 }
 
 - (void)renderOffscreenToOnscreen {
@@ -464,26 +460,6 @@ void ConvertIndexToRGB(int index, float *pRed, float *pGreen, float *pBlue) {
                   withAlpha:_m_drawColor[3].floatValue];
     
     [self drawTexture:_m_offScreen.texture toFramebuffer:_m_onScreen.framebuffer];
-}
-
-- (void)setDrawColorWithRed:(float)red green:(float)green blue:(float)blue alpha:(float)alpha {
-    _m_drawColor[0] = @(red);
-    _m_drawColor[1] = @(green);
-    _m_drawColor[2] = @(blue);
-    _m_drawColor[3] = @(alpha);
-}
-
-- (void)renderOffScreenToSelectionWithName:(int)name {
-    // name(識別子)を色に変換する
-//    float red;
-//    float green;
-//    float blue;
-//    ConvertIndexToRGB(name, &red, &green, &blue);
-//    
-//    [self useProgram:ProgramTypeDiscardAlphaZero];
-//    [self applyDrawColorRed:red withGreen:green withBlue:blue withAlpha:1.0f];
-//    
-//    [self drawTexture:_m_offScreen.texture toFramebuffer:_m_forSelection.framebuffer];
 }
 
 #pragma mark - touchesEvent

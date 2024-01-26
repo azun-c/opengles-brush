@@ -51,8 +51,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (float)getLineWidth;
 - (NSArray<NSNumber *> *)getColorComponents;
-- (void)handleLongPress:(UILongPressGestureRecognizer *)recognizer;
-- (NSMutableArray<__kindof IDrawItem *> *)getDrawItems;
 
 @end
 
@@ -109,11 +107,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setPenTextureWithWidth:(float)width;
 - (void)useProgram:(ProgramType)type;
 - (void)applyDrawColorRed:(float)r withGreen:(float)g withBlue:(float)b withAlpha:(float)a;
-- (void)setDrawColorWithRed:(float)red green:(float)green blue:(float)blue alpha:(float)alpha;
 
 - (BOOL)renderFreeHandCurve:(FreeHandCurve *)item asIndex:(int)index;
-- (void)renderFreeHandCurveForSelection:(FreeHandCurve *)item;
-- (void)renderOffScreenToSelectionWithName:(int)name;
 
 - (void)turnOnColorBlending:(BOOL)toTurnOn;
 - (void)blendAlpha;

@@ -10,13 +10,10 @@
 #import <OpenGLES/ES2/glext.h>
 #import "DrawingCurveState.h"
 #import "FreeDrawView.h"
-//#import "FreeDrawViewController.h"
-//#import "GLDebug.h"
 #import "FreeHandCurve.h"
 #import "Polyline.hpp"
 #import "Triangles.hpp"
 #import "InsertItemOpe.h"
-//#import "VertexObj.h"
 
 static const float kAlphaForFluorescence = 0.5; // 蛍光ペン透明度
 
@@ -63,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
     [self.view drawBegin];
     
     [self renderCurveOnOffscreen];
-    [self.view renderToFinished];
+    [self.view renderToFinished]; // <----
     [self.view renderFinishedToOnScreen];
     
     [self.view drawEnd];
@@ -89,6 +86,21 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 -(void)renderTriangles {
+    Triangles tris = [self generateTriangles];
+
+    [self.view useProgram:ProgramTypeNormalProgram];
+    [self.view applyDrawColorRed:1.0f withGreen:1.0f withBlue:1.0f withAlpha:1.0f];
+
+    // pass triangle points to `positionAttrib` (shader attribute: `Position`)
+    glVertexAttribPointer(self.view.m_pProgram->positionAttrib, 2, GL_FLOAT, GL_FALSE,
+                          sizeof(Vertex), tris.ptrToPoints());CHECK_GL_ERROR();
+    // pass triangle texture coord to `texCodAttrib` (shader attribute: `TextureCoord`)
+    glVertexAttribPointer(self.view.m_pProgram->texCodAttrib, 2, GL_FLOAT, GL_FALSE,
+                          sizeof(Vertex), tris.ptrToTexCod());CHECK_GL_ERROR();
+    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)(3*tris.m_triangles.size()));CHECK_GL_ERROR();
+}
+
+-(Triangles)generateTriangles {
     // 太さ取得
     float curveWidth = [self.view.delegate getLineWidth];
     
@@ -101,28 +113,10 @@ NS_ASSUME_NONNULL_BEGIN
     
     Triangles tris;
     PolylineToTriangles(interpolated, curveWidth, &tris);
-
-    [self.view useProgram:ProgramTypeNormalProgram];
-    [self.view applyDrawColorRed:1.0f withGreen:1.0f withBlue:1.0f withAlpha:1.0f];
-
-    glVertexAttribPointer(self.view.m_pProgram->positionAttrib, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), tris.ptrToPoints());CHECK_GL_ERROR();
-    glVertexAttribPointer(self.view.m_pProgram->texCodAttrib, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), tris.ptrToTexCod());CHECK_GL_ERROR();
-    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)(3*tris.m_triangles.size()));CHECK_GL_ERROR();
+    return tris;
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSArray<NSNumber *> *colorComp = [self.view.delegate getColorComponents];
-    if (_isFluorescence) {
-        [self.view setDrawColorWithRed:colorComp[0].floatValue
-                                 green:colorComp[1].floatValue
-                                  blue:colorComp[2].floatValue
-                                 alpha:kAlphaForFluorescence];
-    } else {
-        [self.view setDrawColorWithRed:colorComp[0].floatValue
-                                 green:colorComp[1].floatValue
-                                  blue:colorComp[2].floatValue
-                                 alpha:colorComp[3].floatValue];
-    }
     CGPoint point = [[touches anyObject] locationInView:self.view];
     
     _currentPolyline.m_points.clear();
@@ -149,18 +143,6 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSArray<NSNumber *> *colorComp = [self.view.delegate getColorComponents];
-    if (_isFluorescence) {
-        [self.view setDrawColorWithRed:colorComp[0].floatValue
-                                 green:colorComp[1].floatValue
-                                  blue:colorComp[2].floatValue
-                                 alpha:kAlphaForFluorescence];
-    } else {
-        [self.view setDrawColorWithRed:colorComp[0].floatValue
-                                 green:colorComp[1].floatValue
-                                  blue:colorComp[2].floatValue
-                                 alpha:colorComp[3].floatValue];
-    }
     CGPoint point = [[touches anyObject] locationInView:self.view];
     _currentPolyline.addPoint(vec2(point.x, point.y));
     // workaround: 1 point won't show on screen

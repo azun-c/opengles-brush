@@ -42,19 +42,10 @@
 
 - (NSArray<NSNumber *> *)getColorComponents {
     NSMutableArray<NSNumber *> *components = @[].mutableCopy;
-    components[0] = @(0);
+    components[0] = @(1);
     components[1] = @(0);
     components[2] = @(0);
     components[3] = @(1);
     return components;
-}
-
-- (void)handleLongPress:(UILongPressGestureRecognizer *)recognizer {
-    
-}
-
-- (nonnull NSMutableArray<__kindof IDrawItem *> *)getDrawItems {
-    NSMutableArray<IDrawItem *> *items = @[].mutableCopy;
-    return items;
 }
 @end

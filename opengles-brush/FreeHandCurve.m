@@ -56,10 +56,6 @@ NS_ASSUME_NONNULL_BEGIN
     return succeeded;
 }
 
-- (void)acceptRendererForSelection:(FreeDrawView *)renderer {
-    [renderer renderFreeHandCurveForSelection:self];
-}
-
 - (void)applyTransform:(CGAffineTransform)transform {
     @synchronized(self) {
         float *points = (float *)[self.pointsData bytes];

@@ -206,15 +206,15 @@
 		F5E6CF102B620C1200B38F16 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
-				F5E6CF112B620C1200B38F16 /* WhiteAsAlpha.frag */,
-				F5E6CF122B620C1200B38F16 /* Normal.frag */,
-				F5E6CF132B620C1200B38F16 /* NoTexture.frag */,
-				F5E6CF142B620C1200B38F16 /* ForImage.frag */,
-				F5E6CF152B620C1200B38F16 /* DiscardAlphaZero.frag */,
 				F5E6CF162B620C1200B38F16 /* Blur.frag */,
+				F5E6CF152B620C1200B38F16 /* DiscardAlphaZero.frag */,
+				F5E6CF142B620C1200B38F16 /* ForImage.frag */,
 				F5E6CF172B620C1200B38F16 /* FreeDrawShaderTypes.h */,
-				F5E6CF182B620C1200B38F16 /* Normal.vert */,
+				F5E6CF122B620C1200B38F16 /* Normal.frag */,
 				F5E6CF192B620C1200B38F16 /* Normal.metal */,
+				F5E6CF182B620C1200B38F16 /* Normal.vert */,
+				F5E6CF132B620C1200B38F16 /* NoTexture.frag */,
+				F5E6CF112B620C1200B38F16 /* WhiteAsAlpha.frag */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
