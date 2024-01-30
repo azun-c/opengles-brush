@@ -54,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) ColorBuffer m_onScreen;
 @property (nonatomic, assign) FBO m_offScreen;
-@property (nonatomic, assign) FBO m_finished;
+//@property (nonatomic, assign) FBO m_finished;
 
 @property (nonatomic, assign) Program *m_pProgram;
 @property (nonatomic, assign) Program m_normalProgram;
@@ -67,19 +67,16 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)drawBegin;
 - (void)drawEnd;
 - (void)drawTexture:(GLuint)texture toFramebuffer:(GLuint)framebuffer;
-- (void)renderFinishedTextureToOnScreen;
+//- (void)renderBackgroundColor;
 - (void)renderOffscreenTextureToOnscreen;
-- (void)renderOffscreenTextureToFinished;
-- (void)clearFrameBuffer:(GLuint)framebuffer
-                  withRed:(float)r
-                    green:(float)g
-                     blue:(float)b
-                    alpha:(float)a;
+//- (void)renderOffscreenTextureToFinished;
+- (void)clearOffscreenColor;
 - (void)setPenTextureWithWidth:(float)width;
 - (void)useProgram:(ProgramType)type;
 - (void)applyDrawColorRed:(float)r withGreen:(float)g withBlue:(float)b withAlpha:(float)a;
 
-- (void)turnOnColorBlending:(BOOL)toTurnOn;
+- (void)turnONColorBlending;
+- (void)turnOFFColorBlending;
 - (void)blendAlpha;
 @end
 

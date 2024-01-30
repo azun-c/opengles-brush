@@ -32,28 +32,28 @@ NS_ASSUME_NONNULL_BEGIN
     [self.view drawBegin];
     
     [self renderCurveOnOffscreen];
-    [self.view renderFinishedTextureToOnScreen];
+//    [self.view renderBackgroundColor];
     [self.view renderOffscreenTextureToOnscreen];
     
     [self.view drawEnd];
 }
 
 -(void)onRenderFinished {
-    [self.view drawBegin];
-    
-    [self renderCurveOnOffscreen];
-    [self.view renderOffscreenTextureToFinished]; // <----
-    [self.view renderFinishedTextureToOnScreen];
-    
-    [self.view drawEnd];
+//    [self.view drawBegin];
+//    
+//    [self renderCurveOnOffscreen];
+//    [self.view renderOffscreenTextureToFinished]; // <----
+//    [self.view renderFinishedTextureToOnScreen];
+//    
+//    [self.view drawEnd];
 }
 
 - (void)renderCurveOnOffscreen {
-    [self.view turnOnColorBlending:YES];
+    [self.view turnONColorBlending];
     [self.view blendAlpha];
     // オフスクリーンのカラーバッファを黒でクリア
-    [self.view clearFrameBuffer:self.view.m_offScreen.framebuffer
-                        withRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
+    // Clear the offscreen color buffer with black
+    [self.view clearOffscreenColor];
 
     if (_currentPolyline.m_points.empty()) {
         return;
@@ -68,9 +68,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)renderTriangles {
     Triangles tris = [self generateTriangles];
-
     [self.view useProgram:ProgramTypeNormalProgram];
-    [self.view applyDrawColorRed:1.0f withGreen:1.0f withBlue:1.0f withAlpha:1.0f];
+//    [self.view applyDrawColorRed:0.0f withGreen:0.0f withBlue:0.0f withAlpha:0.0f];
 
     // pass triangle points to `positionAttrib` (shader attribute: `Position`)
     glVertexAttribPointer(self.view.m_pProgram->positionAttrib, 2, GL_FLOAT, GL_FALSE,
@@ -83,7 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(Triangles)generateTriangles {
     // 太さ取得
-    float curveWidth = 12.0f;
+    float curveWidth = 25.0f;
     
     // ペン先設定
     [self.view setPenTextureWithWidth:curveWidth];
