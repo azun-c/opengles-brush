@@ -1,2 +1,2 @@
 # opengles-brush
-A simple standalone OpenGLES for brush stroke
+A simple standalone OpenGL ES app for brush stroke
