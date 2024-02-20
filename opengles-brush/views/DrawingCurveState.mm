@@ -32,7 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
     [self.view drawBegin];
     
     [self renderCurveOnOffscreen];
-//    [self.view renderBackgroundColor];
     [self.view renderOffscreenTextureToOnscreen];
     
     [self.view drawEnd];
@@ -51,10 +50,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)renderCurveOnOffscreen {
     [self.view turnONColorBlending];
     [self.view blendAlpha];
-    // オフスクリーンのカラーバッファを黒でクリア
     // Clear the offscreen color buffer with black
-    [self.view clearOffscreenColor];
-
+    [self.view clearOffscreenColor]; // C_destination (black transparent)
+    
     if (_currentPolyline.m_points.empty()) {
         return;
     }
@@ -69,7 +67,6 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)renderTriangles {
     Triangles tris = [self generateTriangles];
     [self.view useProgram:ProgramTypeNormalProgram];
-//    [self.view applyDrawColorRed:0.0f withGreen:0.0f withBlue:0.0f withAlpha:0.0f];
 
     // pass triangle points to `positionAttrib` (shader attribute: `Position`)
     glVertexAttribPointer(self.view.m_pProgram->positionAttrib, 2, GL_FLOAT, GL_FALSE,
@@ -82,7 +79,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(Triangles)generateTriangles {
     // 太さ取得
-    float curveWidth = 25.0f;
+    float curveWidth = 12.0f;
     
     // ペン先設定
     [self.view setPenTextureWithWidth:curveWidth];
@@ -102,8 +99,7 @@ NS_ASSUME_NONNULL_BEGIN
     _currentPolyline.m_points.clear();
     _currentPolyline.addPoint(vec2(point.x, point.y));
     
-    // workaround: 1 point won't show on screen
-    _currentPolyline.addPoint(vec2(point.x + 0.01, point.y + 0.01));
+    [self addAnExtraPointBeside:point];
     
 //    [self onRender];
 }
@@ -125,10 +121,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     CGPoint point = [[touches anyObject] locationInView:self.view];
     _currentPolyline.addPoint(vec2(point.x, point.y));
-    // workaround: 1 point won't show on screen
-    _currentPolyline.addPoint(vec2(point.x + 0.03, point.y + 0.03));
+    [self addAnExtraPointBeside:point];
     [self onRenderFinished];
     _currentPolyline.m_points.clear();
+}
+
+-(void)addAnExtraPointBeside:(CGPoint)currentPoint {
+    // workaround: 1 point won't show on screen
+    _currentPolyline.addPoint(vec2(currentPoint.x + 0.03, currentPoint.y + 0.03));
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {

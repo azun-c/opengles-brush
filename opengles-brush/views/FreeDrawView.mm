@@ -16,7 +16,7 @@
 @interface FreeDrawView ()
 
 @property (nonatomic, strong) CADisplayLink * __nullable displayLink;
-
+@property BOOL shouldShowBlendingOnOffEffect;
 @end
 
 
@@ -37,25 +37,41 @@
         CAEAGLLayer *eaglLayer = (CAEAGLLayer *)super.layer;
         eaglLayer.opaque = YES;
 
-        _m_scaleFactor = 1.0f; //[UIScreen mainScreen].scale;
-        self.contentScaleFactor = _m_scaleFactor;
-        eaglLayer.contentsScale = _m_scaleFactor;
-        
         if ([self setUpGL] == NO) {
             return nil;
         }
-        
-        [self drawView:nil];
     }
+    
+    [self setupExtraConfigs];
+    
     return self;
 }
 
+-(void)setupExtraConfigs {
+    self.shouldShowBlendingOnOffEffect = NO;
+}
+
+
+// to demonstrate some effects/ideas
+-(void)performExtraHandlers {
+    if (self.shouldShowBlendingOnOffEffect) {
+        long currentTime = (long)(NSTimeInterval)([[NSDate date] timeIntervalSince1970]);
+        int seconds = (int)currentTime % 10;
+        if (seconds > 5) {
+            [self turnOFFColorBlending];
+        }
+        else {
+            glEnable(GL_BLEND);
+        }
+    }
+}
+
 - (void)drawView:(nullable CADisplayLink *)displayLink {
-    // レンダリング
+    [self performExtraHandlers];
+    
     [self.viewState onRender];
     
-    // レンダーバッファをコンテキストに反映
-    // Reflect renderbuffer in context
+    // Reflect renderbuffer in context (present onScreen buffer)
     [_m_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
@@ -77,22 +93,17 @@
         return NO;
     }
     
-    // オンスクリーンフレームバッファとレンダーバッファ
     // Onscreen framebuffer and renderbuffer
     [self setUpOnScreen];
     
     [self setUpFBOs];
     
-    // プログラム
     [self setUpProgram];
     [self useProgram:ProgramTypeNormalProgram];
     
     [self setupPenTextures];
-    
     [self setupDefaultPenColor];
-    
-    // 初期化
-    [self initializeLayers];
+    [self setupViewport];
     
     return YES;
 }
@@ -106,12 +117,8 @@
     _m_drawColor[3] = @1.0f;
 }
 
--(void)setupDefaultBackgroundColor {
-//    [self clearFrameBuffer:_m_finished.framebuffer withRed:0.5f green:0.5f blue:1.0f alpha:0.0f];
-}
-
 - (void)clearOffscreenColor {
-    // back transparent // if don't call this. the final brush color will be white :D 
+    // black transparent // if not calling this, the final brush color will be white :D
     [self clearFrameBuffer:_m_offScreen.framebuffer withRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
 }
 
@@ -124,6 +131,10 @@
 }
 
 - (void) turnONColorBlending {
+    // https://learnopengl.com/Advanced-OpenGL/Blending
+    if (self.shouldShowBlendingOnOffEffect) {
+        return;
+    }
     glEnable(GL_BLEND);
 }
 
@@ -136,6 +147,9 @@
 }
 
 - (void)setUpOnScreen {
+    // Read more at: https://www.opengles-book.com/OpenGL_ES_20_Programming_Guide_iPhone_eChapter.pdf
+    // Using a Framebuffer Object for Rendering
+    
     // create onScreen's FrameBuffer
     glGenFramebuffers(1, &_m_onScreen.framebuffer);
     // bind onScreen's FrameBuffer to GL_FRAMEBUFFER
@@ -162,7 +176,8 @@
 - (void)setUpFBOs {
     // オフスクリーンFBO
     [self setUpFBO:_m_offScreen];
-    // 描画済み保持用FBO
+    
+    // 描画済み保持用FBO - Framebuffer object for holding all drawn drawings
 //    [self setUpFBO:_m_finished];
 }
 
@@ -186,10 +201,16 @@
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-                 self.bounds.size.width*_m_scaleFactor,
-                 self.bounds.size.height*_m_scaleFactor,
+                 self.bounds.size.width,
+                 self.bounds.size.height,
                  0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    // Attach the texture buffer (fbo.texture - which is a TEXTURE_2D buffer) as a color attachment
+    // of the active framebuffer object (which is the fbo.framebuffer)
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo.texture, 0);
+    
+    // All subsequent rendering operations will now render to the attachments of the currently bound framebuffer
+    // link: https://learnopengl.com/Advanced-OpenGL/Framebuffers
+    // which means: all rendering operations to fbo.framebuffer will render to fbo.texture)
 }
 
 -(void)setupFrameBufferFor:(FBO&)fbo {
@@ -267,9 +288,7 @@
     pProgram->projectionUniform = glGetUniformLocation(pProgram->name, "Projection");
     pProgram->modelviewUniform = glGetUniformLocation(pProgram->name, "Modelview");
     
-//    pProgram->pixelTex = glGetUniformLocation(pProgram->name, "PixelTex");
     pProgram->sampler0Uniform = glGetUniformLocation(pProgram->name, "Sampler0");
-//    pProgram->sampler1Uniform = glGetUniformLocation(pProgram->name, "Sampler1");
 }
 
 - (void)useProgram:(ProgramType)type {
@@ -287,8 +306,7 @@
     glUseProgram(_m_pProgram->name);
     [self setModelview:_m_pProgram];
     [self setProjection:_m_pProgram];
-//    [self setSampler:_m_pProgram];
-//    [self setPixelTex:_m_pProgram];
+    [self setSampler:_m_pProgram];
 }
 
 - (void)setModelview:(Program *)pProgram {
@@ -316,16 +334,10 @@
     glUniformMatrix4fv(pProgram->projectionUniform, 1, GL_FALSE, &ortho[0]);
 }
 
-//- (void)setPixelTex:(Program *)pProgaram {
-//    GLfloat dx = 1.0/self.bounds.size.width;
-//    GLfloat dy = 1.0/self.bounds.size.height;
-//    glUniform2f(pProgaram->pixelTex, dx, dy);
-//}
-
-//- (void)setSampler:(Program *)pProgram {
-//    glUniform1i(pProgram->sampler0Uniform, 0);
-//    glUniform1i(pProgram->sampler1Uniform, 1);
-//}
+- (void)setSampler:(Program *)pProgram {
+    // set the sampler0 to use image unit 0
+    glUniform1i(pProgram->sampler0Uniform, 0);
+}
 
 - (GLuint)createTexture:(NSString *)filename withFormat:(GLint)format {
     GLenum texelFormat = GL_UNSIGNED_BYTE;
@@ -363,20 +375,18 @@
     }
 }
 
-- (void)initializeLayers {
-    NSLog(@"layoutSubviews bounds = (%f, %f)", self.bounds.size.width, self.bounds.size.height);
-    
-    // 記入済みレイヤを透明色でクリア
-    [self setupDefaultBackgroundColor];
-    
-    // ピューポートを設定
-    glViewport(0, 0, 
-               self.bounds.size.width*_m_scaleFactor,
-               self.bounds.size.height*_m_scaleFactor);
+- (void)setupViewport {
+    NSLog(@"layoutSubviews bounds = (%f, %f)",
+          self.bounds.size.width, self.bounds.size.height);
+    glViewport(0, 0,  self.bounds.size.width, self.bounds.size.height);
 }
 
-- (void)applyDrawColorRed:(float)r withGreen:(float)g withBlue:(float)b withAlpha:(float)a {
-    glUniform4f(_m_pProgram->drawColorUniform, r, g, b, a);
+- (void)applyDrawColorWith:(NSArray<NSNumber *>*)drawColor {
+    glUniform4f(_m_pProgram->drawColorUniform, 
+                drawColor[0].floatValue,
+                drawColor[1].floatValue,
+                drawColor[2].floatValue,
+                drawColor[3].floatValue);
 }
 
 - (void)drawBegin {
@@ -394,13 +404,24 @@
     glBindTexture(GL_TEXTURE_2D, texture);
     
     float positionTexCod[] = {
-        0.0, 0.0, 0.0, 1.0, // bottom left (vec4)
-        static_cast<float>(self.bounds.size.width), 0.0, 1.0, 1.0, // bottom right
-        0.0, static_cast<float>(self.bounds.size.height), 0.0, 0.0, // top left
+        // top left
+        0.0, 0.0, // Position
+        0.0, 1.0, // TextCoord (positionTexCod+2)
         
-        static_cast<float>(self.bounds.size.width), 0.0, 1.0, 1.0, // bottom right
-        0.0, static_cast<float>(self.bounds.size.height), 0.0, 0.0, // top left
-        static_cast<float>(self.bounds.size.width), static_cast<float>(self.bounds.size.height), 1.0, 0.0 // top right
+        // top right
+        static_cast<float>(self.bounds.size.width), 0.0, // Position
+        1.0, 1.0, // TextCoord
+        
+        // bottom left
+        0.0, static_cast<float>(self.bounds.size.height), // Position
+        0.0, 0.0, // TextCoord
+        
+        static_cast<float>(self.bounds.size.width), 0.0, 1.0, 1.0, // top right
+        0.0, static_cast<float>(self.bounds.size.height), 0.0, 0.0, // bottom left
+        
+        // bottom right
+        static_cast<float>(self.bounds.size.width), static_cast<float>(self.bounds.size.height), // Position
+        1.0, 0.0 // TextCoord
     };
     
     glVertexAttribPointer(_m_pProgram->positionAttrib, 2, GL_FLOAT, GL_FALSE, 
@@ -411,33 +432,11 @@
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-//- (void)renderOffscreenTextureToFinished {
-//    [self useProgram:ProgramTypeWhiteAsAlphaProgram];
-//    [self applyDrawColorRed:_m_drawColor[0].floatValue
-//                  withGreen:_m_drawColor[1].floatValue
-//                   withBlue:_m_drawColor[2].floatValue
-//                  withAlpha:_m_drawColor[3].floatValue];
-//    
-//    [self drawTexture:_m_offScreen.texture toFramebuffer:_m_finished.framebuffer];
-//}
-
-//- (void)renderBackgroundColor {
-//    // 記入済みレイヤをオンスクリーンにブレンドせずに描画
-//    // Draw filled layers onscreen without blending
-//    [self turnOFFColorBlending];
-//    [self useProgram:ProgramTypeNormalProgram];
-//    [self drawTexture:_m_finished.texture toFramebuffer:_m_onScreen.framebuffer];
-//    [self turnONColorBlending];
-//}
 
 - (void)renderOffscreenTextureToOnscreen {
-    // オフスクリーンをオンスクリーンに描画
-    // Draw offscreen to onscreen
+    // Draw offScreen to onScreen
     [self useProgram:ProgramTypeWhiteAsAlphaProgram];
-    [self applyDrawColorRed:_m_drawColor[0].floatValue
-                  withGreen:_m_drawColor[1].floatValue
-                   withBlue:_m_drawColor[2].floatValue
-                  withAlpha:_m_drawColor[3].floatValue];
+    [self applyDrawColorWith:_m_drawColor];
     
     [self drawTexture:_m_offScreen.texture toFramebuffer:_m_onScreen.framebuffer];
 }

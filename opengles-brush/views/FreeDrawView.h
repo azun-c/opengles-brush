@@ -28,10 +28,9 @@ typedef struct Program {
     GLuint drawColorUniform;
     GLuint projectionUniform;
     GLuint modelviewUniform;
+    
     // FragmentShader Slot
-    GLuint pixelTex; // 1pxあたりのテクスチャ座標差分
     GLuint sampler0Uniform;
-    GLuint sampler1Uniform;
 } Program;
 
 typedef NS_ENUM(NSInteger, ProgramType) {
@@ -46,7 +45,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSMutableArray<NSNumber *> *m_drawColor;
 @property (nonatomic, strong) BaseViewState * __nullable viewState;
 
-@property (nonatomic, assign) float m_scaleFactor; // [UIScreen mainScreen].scale
 @property (nonatomic, assign) GLuint m_penGray_2_32;
 @property (nonatomic, assign) GLuint m_penGray_2_16;
 @property (nonatomic, assign) GLuint m_penGray_32;
@@ -67,13 +65,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)drawBegin;
 - (void)drawEnd;
 - (void)drawTexture:(GLuint)texture toFramebuffer:(GLuint)framebuffer;
-//- (void)renderBackgroundColor;
 - (void)renderOffscreenTextureToOnscreen;
-//- (void)renderOffscreenTextureToFinished;
 - (void)clearOffscreenColor;
 - (void)setPenTextureWithWidth:(float)width;
 - (void)useProgram:(ProgramType)type;
-- (void)applyDrawColorRed:(float)r withGreen:(float)g withBlue:(float)b withAlpha:(float)a;
+- (void)applyDrawColorWith:(NSArray<NSNumber *>*)drawColor;
 
 - (void)turnONColorBlending;
 - (void)turnOFFColorBlending;
