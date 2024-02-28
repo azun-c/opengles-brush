@@ -112,8 +112,8 @@
     // 描画色設定
     _m_drawColor = @[].mutableCopy;
     _m_drawColor[0] = @1.0f;
-    _m_drawColor[1] = @1.0f;
-    _m_drawColor[2] = @0.0f;
+    _m_drawColor[1] = @0.0f;
+    _m_drawColor[2] = @1.0f;
     _m_drawColor[3] = @1.0f;
 }
 

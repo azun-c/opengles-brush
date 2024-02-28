@@ -79,7 +79,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(Triangles)generateTriangles {
     // 太さ取得
-    float curveWidth = 12.0f;
+    float curveWidth = 25.0f;
     
     // ペン先設定
     [self.view setPenTextureWithWidth:curveWidth];

@@ -15,7 +15,7 @@
     self.view.backgroundColor = [UIColor clearColor];
     
     FreeDrawView *freeDrawView = [[FreeDrawView alloc] initWithFrame:self.view.bounds];
-    freeDrawView.backgroundColor = [[UIColor systemBlueColor] colorWithAlphaComponent:0.5];
+    freeDrawView.backgroundColor = [[UIColor systemBlueColor] colorWithAlphaComponent:0.9];
     
     BaseViewState *state = [[DrawingCurveState alloc] init];
     state.view = freeDrawView;
