@@ -6,8 +6,11 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
+#import <UIKit/UIKit.h>
+#import <OpenGLES/EAGL.h>
 
 @class BaseViewState;
+@class VertexObj;
 
 typedef struct ColorBuffer {
     GLuint framebuffer;
@@ -44,6 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) EAGLContext *m_context;
 @property (nonatomic, strong) NSMutableArray<NSNumber *> *m_drawColor;
 @property (nonatomic, strong) BaseViewState * __nullable viewState;
+@property (nonatomic) float lineWidth;
 
 @property (nonatomic, assign) GLuint m_penGray_2_32;
 @property (nonatomic, assign) GLuint m_penGray_2_16;
@@ -57,6 +61,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) Program *m_pProgram;
 @property (nonatomic, assign) Program m_normalProgram;
 @property (nonatomic, assign) Program m_whiteAsAlphaProgram;
+
+@property (nonatomic, strong) NSMutableArray<VertexObj *> *vertices;
 
 - (void)startAnimation;
 

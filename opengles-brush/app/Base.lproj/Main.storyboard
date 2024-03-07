@@ -17,16 +17,17 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OpenGL ES" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7gP-pI-gRM">
-                                <rect key="frame" x="0.0" y="59" width="393" height="793"/>
+                                <rect key="frame" x="0.0" y="59" width="393" height="367"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="26"/>
                                 <color key="textColor" systemColor="systemYellowColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="7gP-pI-gRM" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="8YX-S4-PPl"/>
-                            <constraint firstAttribute="bottom" secondItem="7gP-pI-gRM" secondAttribute="bottom" id="JIN-8P-dqO"/>
+                            <constraint firstAttribute="centerY" secondItem="7gP-pI-gRM" secondAttribute="bottom" id="JIN-8P-dqO"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="7gP-pI-gRM" secondAttribute="trailing" id="KKB-gO-zaJ"/>
                             <constraint firstItem="7gP-pI-gRM" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="RMC-ee-Ye2"/>
                         </constraints>

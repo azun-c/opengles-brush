@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F5811A022B96FD05001C7031 /* VertexObj.m in Sources */ = {isa = PBXBuildFile; fileRef = F5811A002B96FD04001C7031 /* VertexObj.m */; };
+		F5811A052B96FD62001C7031 /* Normal.metal in Sources */ = {isa = PBXBuildFile; fileRef = F5811A042B96FD62001C7031 /* Normal.metal */; };
+		F5811A072B96FDC3001C7031 /* Scalar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5811A062B96FDC3001C7031 /* Scalar+Extensions.swift */; };
+		F5811A092B96FE69001C7031 /* FreeDrawView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5811A082B96FE69001C7031 /* FreeDrawView+Extensions.swift */; };
+		F5811A0B2B96FEF0001C7031 /* Collection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5811A0A2B96FEF0001C7031 /* Collection+Extensions.swift */; };
+		F5811A0D2B96FF17001C7031 /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5811A0C2B96FF17001C7031 /* ArrayExtensions.swift */; };
 		F5B79F922B6214F4004BD866 /* DrawingCurveState.mm in Sources */ = {isa = PBXBuildFile; fileRef = F5B79F902B6214F4004BD866 /* DrawingCurveState.mm */; };
 		F5B79F9D2B62159B004BD866 /* Polyline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5B79F9B2B62159B004BD866 /* Polyline.cpp */; };
 		F5B79F9E2B62159B004BD866 /* Triangles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5B79F9C2B62159B004BD866 /* Triangles.cpp */; };
@@ -38,6 +44,15 @@
 
 /* Begin PBXFileReference section */
 		F53C0A4A2B63A07800372224 /* Polyline.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Polyline.hpp; sourceTree = "<group>"; };
+		F58119FD2B96FBAA001C7031 /* opengles-brush-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "opengles-brush-Bridging-Header.h"; sourceTree = "<group>"; };
+		F5811A002B96FD04001C7031 /* VertexObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VertexObj.m; sourceTree = "<group>"; };
+		F5811A012B96FD05001C7031 /* VertexObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VertexObj.h; sourceTree = "<group>"; };
+		F5811A032B96FD3F001C7031 /* FreeDrawShaderTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeDrawShaderTypes.h; sourceTree = "<group>"; };
+		F5811A042B96FD62001C7031 /* Normal.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Normal.metal; sourceTree = "<group>"; };
+		F5811A062B96FDC3001C7031 /* Scalar+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Scalar+Extensions.swift"; sourceTree = "<group>"; };
+		F5811A082B96FE69001C7031 /* FreeDrawView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FreeDrawView+Extensions.swift"; sourceTree = "<group>"; };
+		F5811A0A2B96FEF0001C7031 /* Collection+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Collection+Extensions.swift"; sourceTree = "<group>"; };
+		F5811A0C2B96FF17001C7031 /* ArrayExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
 		F5B79F902B6214F4004BD866 /* DrawingCurveState.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DrawingCurveState.mm; sourceTree = "<group>"; };
 		F5B79F912B6214F4004BD866 /* DrawingCurveState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingCurveState.h; sourceTree = "<group>"; };
 		F5B79F9A2B62159B004BD866 /* Triangles.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Triangles.hpp; sourceTree = "<group>"; };
@@ -110,13 +125,14 @@
 		F53C0A4B2B63A0A300372224 /* app */ = {
 			isa = PBXGroup;
 			children = (
+				F5E6CEEF2B6201D300B38F16 /* AppDelegate.h */,
+				F5E6CEF02B6201D300B38F16 /* AppDelegate.m */,
 				F5E6CF002B6201D500B38F16 /* Info.plist */,
 				F5E6CEFD2B6201D500B38F16 /* LaunchScreen.storyboard */,
 				F5E6CF012B6201D500B38F16 /* main.m */,
 				F5E6CEF82B6201D300B38F16 /* Main.storyboard */,
+				F58119FD2B96FBAA001C7031 /* opengles-brush-Bridging-Header.h */,
 				F5E6CF0F2B620A4600B38F16 /* opengles-brush-Prefix.pch */,
-				F5E6CEEF2B6201D300B38F16 /* AppDelegate.h */,
-				F5E6CEF02B6201D300B38F16 /* AppDelegate.m */,
 				F5E6CEF22B6201D300B38F16 /* SceneDelegate.h */,
 				F5E6CEF32B6201D300B38F16 /* SceneDelegate.m */,
 			);
@@ -126,8 +142,11 @@
 		F53C0A4C2B63A0BA00372224 /* utilities */ = {
 			isa = PBXGroup;
 			children = (
+				F5811A0C2B96FF17001C7031 /* ArrayExtensions.swift */,
+				F5811A0A2B96FEF0001C7031 /* Collection+Extensions.swift */,
 				F5E6CF0B2B62076000B38F16 /* IResourceManager.hpp */,
 				F5E6CF0C2B6207D000B38F16 /* ResourceManager.mm */,
+				F5811A062B96FDC3001C7031 /* Scalar+Extensions.swift */,
 			);
 			path = utilities;
 			sourceTree = "<group>";
@@ -141,6 +160,9 @@
 				F5B79F902B6214F4004BD866 /* DrawingCurveState.mm */,
 				F5E6CF082B6202AA00B38F16 /* FreeDrawView.h */,
 				F5E6CF092B6202AA00B38F16 /* FreeDrawView.mm */,
+				F5811A082B96FE69001C7031 /* FreeDrawView+Extensions.swift */,
+				F5811A012B96FD05001C7031 /* VertexObj.h */,
+				F5811A002B96FD04001C7031 /* VertexObj.m */,
 				F5E6CEF52B6201D300B38F16 /* ViewController.h */,
 				F5E6CEF62B6201D300B38F16 /* ViewController.m */,
 			);
@@ -180,7 +202,9 @@
 		F5E6CF102B620C1200B38F16 /* shaders */ = {
 			isa = PBXGroup;
 			children = (
+				F5811A032B96FD3F001C7031 /* FreeDrawShaderTypes.h */,
 				F5E6CF122B620C1200B38F16 /* Normal.frag */,
+				F5811A042B96FD62001C7031 /* Normal.metal */,
 				F5E6CF182B620C1200B38F16 /* Normal.vert */,
 				F5E6CF112B620C1200B38F16 /* WhiteAsAlpha.frag */,
 			);
@@ -235,6 +259,7 @@
 				TargetAttributes = {
 					F5E6CEEB2B6201D300B38F16 = {
 						CreatedOnToolsVersion = 15.0;
+						LastSwiftMigration = 1500;
 					};
 				};
 			};
@@ -291,12 +316,18 @@
 				F5E6CEF72B6201D300B38F16 /* ViewController.m in Sources */,
 				F5B79FB22B621782004BD866 /* NonuniformSpline.cpp in Sources */,
 				F5B79F9E2B62159B004BD866 /* Triangles.cpp in Sources */,
+				F5811A072B96FDC3001C7031 /* Scalar+Extensions.swift in Sources */,
+				F5811A052B96FD62001C7031 /* Normal.metal in Sources */,
 				F5E6CF0D2B6207D000B38F16 /* ResourceManager.mm in Sources */,
+				F5811A092B96FE69001C7031 /* FreeDrawView+Extensions.swift in Sources */,
 				F5B79F9D2B62159B004BD866 /* Polyline.cpp in Sources */,
 				F5B79F922B6214F4004BD866 /* DrawingCurveState.mm in Sources */,
 				F5E6CEF12B6201D300B38F16 /* AppDelegate.m in Sources */,
+				F5811A0D2B96FF17001C7031 /* ArrayExtensions.swift in Sources */,
 				F5E6CF022B6201D500B38F16 /* main.m in Sources */,
 				F5E6CF0A2B6202AA00B38F16 /* FreeDrawView.mm in Sources */,
+				F5811A0B2B96FEF0001C7031 /* Collection+Extensions.swift in Sources */,
+				F5811A022B96FD05001C7031 /* VertexObj.m in Sources */,
 				F5E6CEF42B6201D300B38F16 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -444,6 +475,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LM83V6KS3Q;
@@ -455,8 +487,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -466,6 +497,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "azun.demo.opengles-brush";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "opengles-brush/app/opengles-brush-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -475,6 +509,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LM83V6KS3Q;
@@ -486,8 +521,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -497,6 +531,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "azun.demo.opengles-brush";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "opengles-brush/app/opengles-brush-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

@@ -12,6 +12,7 @@
 #import "DrawingCurveState.h"
 
 #import "IResourceManager.hpp"
+#import "opengles_brush-Swift.h"
 
 @interface FreeDrawView ()
 
@@ -21,6 +22,8 @@
 
 
 @implementation FreeDrawView
+
+@synthesize lineWidth = _lineWidth;
 
 + (Class)layerClass {
     return [CAEAGLLayer class];
@@ -41,7 +44,9 @@
             return nil;
         }
     }
-    
+#if SHOULD_USE_METAL
+        [self setupMetalView];
+#endif
     [self setupExtraConfigs];
     
     return self;
@@ -51,19 +56,56 @@
     self.shouldShowBlendingOnOffEffect = NO;
 }
 
+-(float)lineWidth {
+//    return 32.0;
+    long seconds = (long)(NSTimeInterval)([[NSDate date] timeIntervalSince1970]);
+    return MAX(((seconds / 2) % 25), 6);
+}
 
 // to demonstrate some effects/ideas
 -(void)performExtraHandlers {
+    long currentTime = (long)(NSTimeInterval)([[NSDate date] timeIntervalSince1970]);
+    int seconds = (int)currentTime % 10;
     if (self.shouldShowBlendingOnOffEffect) {
-        long currentTime = (long)(NSTimeInterval)([[NSDate date] timeIntervalSince1970]);
-        int seconds = (int)currentTime % 10;
-        if (seconds > 5) {
+        if (seconds >= 4) {
             [self turnOFFColorBlending];
         }
         else {
             glEnable(GL_BLEND);
         }
     }
+    
+    // change drawing color
+    [self updateDrawingColor];
+}
+
+-(void)updateDrawingColor {
+    // change color frequently
+    UIColor *color;
+    int seconds = (long)(NSTimeInterval)([[NSDate date] timeIntervalSince1970]) % 20;
+    if (seconds > 15) {
+        color = UIColor.systemRedColor;
+    }
+    else if (seconds > 10) {
+        color = UIColor.systemGreenColor;
+    }
+    else if (seconds > 5) {
+        color = [[UIColor alloc] initWithRed:1 green:1 blue:0.6 alpha:1];
+    }
+    else {
+        color = [[UIColor alloc] initWithRed:0.6 green:1 blue:0 alpha:1];
+    }
+    
+    CGFloat red, green, blue, alpha;
+    
+    [color getRed: &red
+            green: &green
+             blue: &blue
+            alpha: &alpha];
+    _m_drawColor[0] = [[NSNumber alloc] initWithDouble:red];
+    _m_drawColor[1] = [[NSNumber alloc] initWithDouble:green];
+    _m_drawColor[2] = [[NSNumber alloc] initWithDouble:blue];
+    _m_drawColor[3] = [[NSNumber alloc] initWithDouble:alpha];
 }
 
 - (void)drawView:(nullable CADisplayLink *)displayLink {
@@ -111,10 +153,7 @@
 -(void)setupDefaultPenColor {
     // 描画色設定
     _m_drawColor = @[].mutableCopy;
-    _m_drawColor[0] = @1.0f;
-    _m_drawColor[1] = @0.0f;
-    _m_drawColor[2] = @1.0f;
-    _m_drawColor[3] = @1.0f;
+    [self updateDrawingColor];
 }
 
 - (void)clearOffscreenColor {
