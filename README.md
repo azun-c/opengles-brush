@@ -55,4 +55,14 @@ A simple standalone OpenGL ES app for brush stroke
 - For the OpenGL app, we can see that it has 2 objects: `_m_onScreen` and `m_offScreen`. Which stand for screen buffer and offscreen buffer.
 
 ### Rendering pipeline: 
-- TBD
+- Source: ([OpenGL_ES_2.0_Programming_Guide - Page 37/457](https://usermanual.wiki/Pdf/OpenGL20ES202020Programming20Guide.197713012/view))
+  ![pipeline](https://github.com/azun-c/opengles-brush/assets/114891397/447cfcdc-c6b3-4093-8d9a-c6e189db4c89)
+
+
+- Let's dive into a bit. Let's focus on the stages with items marked as red number inside red circle. To easily imagine, I put sample data and result for each stage according to the OpenGL brush stroke app beside the stage items.
+  - (1) Vertex Arrays/ Buffer Objects: General, graphics libraries will work with vertices of simple geometries, called primities. They are points(formed by 1 vertex), lines(formed by 2 vertices), triangles(formed by 3 vertices).
+    - Especially, in the app, when rendering a single circle, it is basically rendering based on a square. Let's "simply" think that drawing a square is equal to drawing 2 triangles: the first triangle has 3 vertices (v0, v1, v2), the second triangle has 3 vertices(v3, v4, v5), and v3 is exactly the same as v0, v4 is exactly the same as v2. (No spacing between 2 triangles)
+    - So the vertex array should be fetched with 6 vertices. (In reality, there are actually 18 vertices in this case :D, but not much different)
+  - (2) Vertex Shader: This is a sub-routine, for processing each vertex, based on its position. In order to map the position to the proper location in the drawing surface. And there may be some other processing if needed(such translations, scale, etc.)
+    - The parameter is a vertex, passed from the vertex array.
+  - (3) Primities Assembly: 
