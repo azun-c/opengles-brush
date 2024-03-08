@@ -60,9 +60,16 @@ A simple standalone OpenGL ES app for brush stroke
 
 
 - Let's dive into a bit. Let's focus on the stages with items marked as red number inside red circle. To easily imagine, I put sample data and result for each stage according to the OpenGL brush stroke app beside the stage items.
-  - (1) Vertex Arrays/ Buffer Objects: General, graphics libraries will work with vertices of simple geometries, called primities. They are points(formed by 1 vertex), lines(formed by 2 vertices), triangles(formed by 3 vertices).
-    - Especially, in the app, when rendering a single circle, it is basically rendering based on a square. Let's "simply" think that drawing a square is equal to drawing 2 triangles: the first triangle has 3 vertices (v0, v1, v2), the second triangle has 3 vertices(v3, v4, v5), and v3 is exactly the same as v0, v4 is exactly the same as v2. (No spacing between 2 triangles)
+  - (1) Vertex Arrays/ Buffer Objects: In general, graphics libraries will work with simple geometries, called primities. They are points(formed by 1 vertex), lines(formed by 2 vertices), triangles(formed by 3 vertices). So our job is to translate our shapes into prmities, which are in turn defined by a set of vertices.
+    - Especially, in the app, when rendering a single circle, it first renders a square. Let's "simply" think that drawing a square is equal to drawing 2 triangles: the first triangle has 3 vertices (v0, v1, v2), the second triangle has 3 vertices(v3, v4, v5), and v3 is exactly the same as v0, v4 is exactly the same as v2. (No spacing between 2 triangles)
     - So the vertex array should be fetched with 6 vertices. (In reality, there are actually 18 vertices in this case :D, but not much different)
-  - (2) Vertex Shader: This is a sub-routine, for processing each vertex, based on its position. In order to map the position to the proper location in the drawing surface. And there may be some other processing if needed(such translations, scale, etc.)
-    - The parameter is a vertex, passed from the vertex array.
-  - (3) Primities Assembly: 
+  - (2) Vertex Shader: This is a sub-routine, a small program, for processing every vertex from the vertex arrays. Its major responsibility is to map the position of each to the proper location in the drawing surface. And there may be some other processing if needed(such translations, scale, etc.)
+    - The parameter is a vertex, passed from the vertex arrays.
+  - (3) Primities Assembly: Based on the primity type (point, line, triangle), at this stage, a set of processed vertices, which are the outputs of stage 2, be reassembled into a corresponding primity.
+    - For example: If we're about to draw lines, then the `Primities Assembly` will be waiting until it receives 2 processed vertices in order to reassemble into a line. Similarly, for triangles, after `Vertex Shader` outputs 3 vertices, then the `Primities Assembly` will reassemble into a triangle.
+    - In our case, the vertex array has 6 vertices (v0,.., v5), once the vertex shader finishes processing 3 vertices (v0, v1, v2), output as (v00, v11, v22) (into primities assembly buffer), the prmities assembly will reassemble into a triangle, before passing to the next stage.
+    - Note: This stage is a hidden stage. We have no control over it.
+  - (4) Rasterization: At this stage, we have a primity(according to its vertices). To make a primity visible, we need to allocate colors to it by setting color to every single pixel belonging to the primity. However, we only have the pixel positions of very few vertices (i.e.: 3 for triangle), how can we determine if a pixel is inside or outside of the primity? This is the reason that the Rasterization comes into place. [Rasterization](https://www.khronos.org/opengl/wiki/Rasterization) is the process whereby each individual Primitive is broken down into discrete elements called Fragments. These fragments will be in turn fetched to the stage, called `Fragment Shader`.
+    - Note: This stage is a hidden stage. We have no control over it.
+ - (5) Texture Memory: This is where textures are stored, so that they can be used as samplers (in `Fragment Shader`), contributing to detemine the target color of a pixel.
+ - (6) Fragment Shader: 
