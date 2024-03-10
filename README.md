@@ -15,12 +15,13 @@ A simple standalone OpenGL ES app for brush stroke
   https://github.com/azun-c/opengles-brush/assets/114891397/61b744a3-b967-4933-919c-882f2e8e0d37
 
 - First, when tapped, depends on how big the brush size is, the app will determine a square at the tapped location.
-  - Note: at this time, the square has not been painted with a color yet - the pink color just to show the shape
+  - Note: at this time, the square has not been painted with a color yet
 
-  ![square-dot](https://github.com/azun-c/opengles-brush/assets/114891397/ca562f0a-2078-48dd-a535-304b040af8eb)
+  ![square-dot](https://github.com/azun-c/opengles-brush/assets/114891397/05b8856b-b03d-4c8b-ae44-1521b26ae344)
 
 
-- Then, the shape will be filled with a corresponding texture( or image) (textures are located [here](https://github.com/azun-c/opengles-brush/tree/main/opengles-brush/textures))
+
+- Then, the shape will be filled with a corresponding texture( or image) based on the size (textures are located [here](https://github.com/azun-c/opengles-brush/tree/main/opengles-brush/textures))
 
   ![square-with-texture](https://github.com/azun-c/opengles-brush/assets/114891397/fad0754e-1aa5-49fe-9648-ef584c538de3)
 
@@ -56,20 +57,25 @@ A simple standalone OpenGL ES app for brush stroke
 
 ### Rendering pipeline: 
 - Source: ([OpenGL_ES_2.0_Programming_Guide - Page 37/457](https://usermanual.wiki/Pdf/OpenGL20ES202020Programming20Guide.197713012/view))
-  ![pipeline](https://github.com/azun-c/opengles-brush/assets/114891397/447cfcdc-c6b3-4093-8d9a-c6e189db4c89)
+  ![pipeline](https://github.com/azun-c/opengles-brush/assets/114891397/ea0619f8-c623-42ad-b38f-4dc3adaa3515)
 
 
-- Let's dive into a bit. Let's focus on the stages with items marked as red number inside red circle. To easily imagine, I put sample data and result for each stage according to the OpenGL brush stroke app beside the stage items.
-  - (1) Vertex Arrays/ Buffer Objects: In general, graphics libraries will work with simple geometries, called primities. They are points(formed by 1 vertex), lines(formed by 2 vertices), triangles(formed by 3 vertices). So our job is to translate our shapes into prmities, which are in turn defined by a set of vertices.
-    - Especially, in the app, when rendering a single circle, it first renders a square. Let's "simply" think that drawing a square is equal to drawing 2 triangles: the first triangle has 3 vertices (v0, v1, v2), the second triangle has 3 vertices(v3, v4, v5), and v3 is exactly the same as v0, v4 is exactly the same as v2. (No spacing between 2 triangles)
+
+- Let's dive into a bit. Let's focus on the stages with items marked as red number inside red circle. For easily imagination, I put sample data and result for each stage according to the OpenGL brush stroke app beside the stage items.
+  - (1) Vertex Arrays/ Buffer Objects: In general, graphics libraries will work with simple geometries, called primities. They are points(formed by 1 vertex), lines(formed by 2 vertices), triangles(formed by 3 vertices). So our job is to translate our shapes into primities, which are in turn defined by a set of vertices.
+    - Especially, in the app, when rendering a single circle, it first renders a square. Let's "simply" think that drawing a square is equal to drawing 2 opposite triangles: the first triangle has 3 vertices (v0, v1, v2), the second triangle has 3 vertices(v3, v4, v5), and v3 is exactly the same as v0, v4 is exactly the same as v2. (No spacing between the 2 triangles)
     - So the vertex array should be fetched with 6 vertices. (In reality, there are actually 18 vertices in this case :D, but not much different)
-  - (2) Vertex Shader: This is a sub-routine, a small program, for processing every vertex from the vertex arrays. Its major responsibility is to map the position of each to the proper location in the drawing surface. And there may be some other processing if needed(such translations, scale, etc.)
+  - (2) Vertex Shader: This is a sub-routine, a small vital program, for processing every vertex from the vertex arrays. Its major responsibility is to map the position of each to the proper location in the drawing surface. And there may be some other processing if needed(such translations, scale, etc.)
     - The parameter is a vertex, passed from the vertex arrays.
-  - (3) Primities Assembly: Based on the primity type (point, line, triangle), at this stage, a set of processed vertices, which are the outputs of stage 2, be reassembled into a corresponding primity.
+  - (3) Primities Assembly: Based on the primity type (point, line, triangle), at this stage, the processed vertices, which are the outputs of stage 2, will be reassembled into a corresponding primities.
     - For example: If we're about to draw lines, then the `Primities Assembly` will be waiting until it receives 2 processed vertices in order to reassemble into a line. Similarly, for triangles, after `Vertex Shader` outputs 3 vertices, then the `Primities Assembly` will reassemble into a triangle.
-    - In our case, the vertex array has 6 vertices (v0,.., v5), once the vertex shader finishes processing 3 vertices (v0, v1, v2), output as (v00, v11, v22) (into primities assembly buffer), the prmities assembly will reassemble into a triangle, before passing to the next stage.
+    - In our case, the vertex array has 6 vertices (v0,.., v5), once the vertex shader finishes processing 3 vertices (v0, v1, v2), outputs as (v00, v11, v22) (into primities assembly buffer), the primities assembly will reassemble into a triangle, before passing to the next stage.
     - Note: This stage is a hidden stage. We have no control over it.
   - (4) Rasterization: At this stage, we have a primity(according to its vertices). To make a primity visible, we need to allocate colors to it by setting color to every single pixel belonging to the primity. However, we only have the pixel positions of very few vertices (i.e.: 3 for triangle), how can we determine if a pixel is inside or outside of the primity? This is the reason that the Rasterization comes into place. [Rasterization](https://www.khronos.org/opengl/wiki/Rasterization) is the process whereby each individual Primitive is broken down into discrete elements called Fragments. These fragments will be in turn fetched to the stage, called `Fragment Shader`.
     - Note: This stage is a hidden stage. We have no control over it.
  - (5) Texture Memory: This is where textures are stored, so that they can be used as samplers (in `Fragment Shader`), contributing to detemine the target color of a pixel.
- - (6) Fragment Shader: 
+ - (6) Fragment Shader:
+   - ![fragment-texturing](https://github.com/azun-c/opengles-brush/assets/114891397/dc7ed3ee-5516-4740-820b-2010a1d18d6a)
+   - Similar with Vertex Shader, this is also a small vital program. This will process each concrete fragment and allocate a suitable color to it. Depending on the needs, we can assign a same solid color to all the fragments or assign(and with processing) the color from a sampler (texture) like the above image.
+   - In the app, we actualy maintain a list of ball pen textures, so that we will need to do the sampling from the suitable texture, to render a color (black or white) to each fragment
+- (7) [Framebuffer](https://learnopengl.com/Advanced-OpenGL/Framebuffers): A memory portion to store data of drawn primities. The data will be passed to the render buffer for displaying or later to store purpose.
