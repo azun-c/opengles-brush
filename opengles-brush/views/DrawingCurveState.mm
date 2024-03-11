@@ -77,21 +77,15 @@ NS_ASSUME_NONNULL_BEGIN
     [self.view useProgram:ProgramTypeNormalProgram];
     
 #if SHOULD_USE_OPENGL_FOR_DRAWING_CURVE_STATE
-    long currentTime = (long)(NSTimeInterval)([[NSDate date] timeIntervalSince1970]);
-    int seconds = (int)currentTime % 10;
-    if (seconds >= 4) {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glBlendEquation(GL_MAX_EXT);
-        glVertexAttribPointer(self.view.m_pProgram->positionAttrib, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), tris.ptrToPoints());
-        glVertexAttribPointer(self.view.m_pProgram->texCodAttrib, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), tris.ptrToTexCod());
-        glDrawArrays(GL_TRIANGLES, 0, (GLsizei)(3*tris.m_triangles.size()));
-        
-        glBlendEquation(GL_FUNC_ADD);
-    }
-//    else { // enable this to draw using OpenGL ES and Metal alternatively
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendEquation(GL_MAX_EXT);
+    glVertexAttribPointer(self.view.m_pProgram->positionAttrib, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), tris.ptrToPoints());
+    glVertexAttribPointer(self.view.m_pProgram->texCodAttrib, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), tris.ptrToTexCod());
+    glDrawArrays(GL_TRIANGLES, 0, (GLsizei)(3*tris.m_triangles.size()));
+    
+    glBlendEquation(GL_FUNC_ADD);
 #elif SHOULD_USE_METAL
-        [self convertTrianglesFrom:tris];
-//    }
+    [self convertTrianglesFrom:tris];
 #endif
 }
 

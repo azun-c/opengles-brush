@@ -16,7 +16,7 @@
     #import <MetalKit/MetalKit.h>
 #endif
 
-#define SHOULD_USE_METAL 1
-#define SHOULD_USE_OPENGL_FOR_DRAWING_CURVE_STATE 0
+#define SHOULD_USE_METAL 0
+#define SHOULD_USE_OPENGL_FOR_DRAWING_CURVE_STATE 1
 
 #endif /* opengles_brush_Prefix_pch */
