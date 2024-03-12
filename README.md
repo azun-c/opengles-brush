@@ -17,14 +17,14 @@ A simple standalone OpenGL ES app for brush stroke
 
   https://github.com/azun-c/opengles-brush/assets/114891397/61b744a3-b967-4933-919c-882f2e8e0d37
 
-- First, when tapped, depends on how big the brush size is, the app will determine a square at the tapped location.
+- First, when tapped, depending on how big the brush size is, the app will determine a square at the tapped location.
   - Note: at this time, the square has not been painted with a color yet
 
   ![square-dot](https://github.com/azun-c/opengles-brush/assets/114891397/05b8856b-b03d-4c8b-ae44-1521b26ae344)
 
 
 
-- Then, the shape will be filled with a corresponding texture( or image) based on the size (textures are located [here](https://github.com/azun-c/opengles-brush/tree/main/opengles-brush/textures))
+- Then, the shape will be filled with a corresponding texture(or image) based on the size (textures are located [here](https://github.com/azun-c/opengles-brush/tree/main/opengles-brush/textures))
 
   ![square-with-texture](https://github.com/azun-c/opengles-brush/assets/114891397/fad0754e-1aa5-49fe-9648-ef584c538de3)
 
@@ -109,3 +109,16 @@ A simple standalone OpenGL ES app for brush stroke
 - [Program objects](https://www.khronos.org/opengl/wiki/GLSL_Object#Program_objects): are factors to execute every drawing commands. Each program should have the essential vertex shader and fragment shader. When drawing, the program will go through the `rendering pipeline` (as mentioned above). The app has 2 programs with the combinations of the 3 shaders: `Normal.vert`, `Normal.frag`, `WhiteAsAlpha.frag`.
 - [Blending](https://learnopengl.com/Advanced-OpenGL/Blending)
   - This is an important technique to have the drawn items displayed as we want. If we don't use this, we won't able to render circles with rounded corner.
+
+### A bit more about OpenGL ES:
+- Ebooks can be found in this [issue](https://cimtops.atlassian.net/browse/IRDPM-14555)
+- [Framebuffers](https://learnopengl.com/Advanced-OpenGL/Framebuffers)
+
+### Converting OpenGL ES to Metal API:
+- The approach to migrate in this repo is to creating an overlay of type MTKView and Metal drawings will go on this view.
+  - The `not migrated` features will still be using the underneath layer for drawing.
+  - The migration is based on the implementation of this similar app written in [Metal - Swift](https://github.com/azun-c/metal-brush). Please check it out for better understanding.
+- Use suitable macros to enable/disable the whole Metal migration or a specific feature migration, to switch between OpenGL ES and Metal.
+- Utilize `the same` rendering method (Offscreen rendering) in MetalKit and use the same triangles/vertices data to minimize changes in data structures and existing code.
+- Changes are almost written in Swift with a new extension. With very selective changes injected to existing code, we should have a high confidence that we won't break the existing logic.
+- When all the features are migrated to Metal API, we can finally **remove all** the code blocks having deprecated OpenGL ES API calls OR just leave them there if we want, because those blocks are not being compiled based on the macros' values.
