@@ -59,8 +59,8 @@ A simple standalone OpenGL ES app for brush stroke
 - For the OpenGL app, we can see that it has 2 objects: `m_onScreen` and `m_offScreen`. Which stand for screen buffer and offscreen buffer.
 
 ### Rendering pipeline: 
-- Source: ([OpenGL_ES_2.0_Programming_Guide - Page 37/457](https://usermanual.wiki/Pdf/OpenGL20ES202020Programming20Guide.197713012/view))
-  ![pipeline](https://github.com/azun-c/opengles-brush/assets/114891397/ea0619f8-c623-42ad-b38f-4dc3adaa3515) with some added sample data for additional explanations
+- Source: ([OpenGL_ES_2.0_Programming_Guide - Page 37/457](https://usermanual.wiki/Pdf/OpenGL20ES202020Programming20Guide.197713012/view)) with some added sample data for additional explanations
+  ![pipeline](https://github.com/azun-c/opengles-brush/assets/114891397/ea0619f8-c623-42ad-b38f-4dc3adaa3515) 
 
 
 - Let's dive into a bit. Let's focus on the stages with items marked as red number inside red circle. For easily imagination, I put sample data and result for each stage according to the OpenGL brush stroke app beside the stage items.
