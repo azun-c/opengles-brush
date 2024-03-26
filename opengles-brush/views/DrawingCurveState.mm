@@ -33,19 +33,20 @@ NS_ASSUME_NONNULL_BEGIN
     [self.view drawBegin];
     
     [self renderCurveOnOffscreen];
+    [self.view renderFinishedTextureToOnScreen];
     [self.view renderOffscreenTextureToOnscreen];
     
     [self.view drawEnd];
 }
 
 -(void)onRenderFinished {
-//    [self.view drawBegin];
-//    
-//    [self renderCurveOnOffscreen];
-//    [self.view renderOffscreenTextureToFinished]; // <----
-//    [self.view renderFinishedTextureToOnScreen];
-//    
-//    [self.view drawEnd];
+    [self.view drawBegin];
+    
+    [self renderCurveOnOffscreen];
+    [self.view renderOffscreenTextureToFinished]; // <----
+    [self.view renderFinishedTextureToOnScreen];
+    
+    [self.view drawEnd];
 }
 
 - (void)renderCurveOnOffscreen {
@@ -126,11 +127,9 @@ NS_ASSUME_NONNULL_BEGIN
     CGPoint point = [[touches anyObject] locationInView:self.view];
     
     _currentPolyline.m_points.clear();
-    _currentPolyline.addPoint(vec2(point.x, point.y));
+    [self addNew:point];
     
-    [self addAnExtraPointBeside:point];
-    
-//    [self onRender];
+    [self onRender];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -139,16 +138,14 @@ NS_ASSUME_NONNULL_BEGIN
         return;
     }
     CGPoint point = [[touches anyObject] locationInView:self.view];
-    
-    _currentPolyline.addPoint(vec2(point.x, point.y));
-    
+    [self addNew:point];
     
     // マルチタッチの時
     if ([event allTouches].count > 1) {
         _currentPolyline.m_points.clear();
     }
     
-//    [self onRender];
+    [self onRender];
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -157,15 +154,32 @@ NS_ASSUME_NONNULL_BEGIN
         return;
     }
     CGPoint point = [[touches anyObject] locationInView:self.view];
-    _currentPolyline.addPoint(vec2(point.x, point.y));
     [self addAnExtraPointBeside:point];
     [self onRenderFinished];
     _currentPolyline.m_points.clear();
 }
 
--(void)addAnExtraPointBeside:(CGPoint)currentPoint {
-    // workaround: 1 point won't show on screen
-    _currentPolyline.addPoint(vec2(currentPoint.x + 0.1, currentPoint.y + 0.1));
+-(void)addAnExtraPointBeside:(CGPoint)point {
+    if (_currentPolyline.count() > 1) {
+        return;
+    }
+    
+    CGPoint nearbyPoint = CGPointMake(point.x + 0.1, point.y + 0.1);
+    // 点の描画は、２つ目の点を少しずらすと表示される（同じ座標では長さが０になるので表示されない）
+    // The drawing of the point will be displayed by slightly shifting the second point
+    // (at the same coordinates, the length will be 0, so it will not be displayed)
+    if (_currentPolyline.count() == 0) {
+        [self addNew:point];
+        [self addNew:nearbyPoint];
+        // １以上の時に最後の点を追加してしまうと、曲線の補完が変になる
+        // If you add the last point when it is 1 or more, the curve completion will be strange.
+    } else {
+        [self addNew:nearbyPoint];
+    }
+}
+
+-(void)addNew:(CGPoint)point {
+    _currentPolyline.addPoint(vec2(point.x, point.y));
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {

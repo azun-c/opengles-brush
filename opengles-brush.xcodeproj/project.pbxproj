@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1EA06C752BB2545E00EFD7EA /* ViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA06C742BB2545E00EFD7EA /* ViewController+Extensions.swift */; };
 		F5811A022B96FD05001C7031 /* VertexObj.m in Sources */ = {isa = PBXBuildFile; fileRef = F5811A002B96FD04001C7031 /* VertexObj.m */; };
 		F5811A052B96FD62001C7031 /* Normal.metal in Sources */ = {isa = PBXBuildFile; fileRef = F5811A042B96FD62001C7031 /* Normal.metal */; };
 		F5811A072B96FDC3001C7031 /* Scalar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5811A062B96FDC3001C7031 /* Scalar+Extensions.swift */; };
@@ -43,6 +44,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1EA06C742BB2545E00EFD7EA /* ViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Extensions.swift"; sourceTree = "<group>"; };
 		F53C0A4A2B63A07800372224 /* Polyline.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Polyline.hpp; sourceTree = "<group>"; };
 		F58119FD2B96FBAA001C7031 /* opengles-brush-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "opengles-brush-Bridging-Header.h"; sourceTree = "<group>"; };
 		F5811A002B96FD04001C7031 /* VertexObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VertexObj.m; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 				F5811A002B96FD04001C7031 /* VertexObj.m */,
 				F5E6CEF52B6201D300B38F16 /* ViewController.h */,
 				F5E6CEF62B6201D300B38F16 /* ViewController.m */,
+				1EA06C742BB2545E00EFD7EA /* ViewController+Extensions.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -316,6 +319,7 @@
 				F5E6CEF72B6201D300B38F16 /* ViewController.m in Sources */,
 				F5B79FB22B621782004BD866 /* NonuniformSpline.cpp in Sources */,
 				F5B79F9E2B62159B004BD866 /* Triangles.cpp in Sources */,
+				1EA06C752BB2545E00EFD7EA /* ViewController+Extensions.swift in Sources */,
 				F5811A072B96FDC3001C7031 /* Scalar+Extensions.swift in Sources */,
 				F5811A052B96FD62001C7031 /* Normal.metal in Sources */,
 				F5E6CF0D2B6207D000B38F16 /* ResourceManager.mm in Sources */,

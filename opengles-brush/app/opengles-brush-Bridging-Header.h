@@ -5,3 +5,4 @@
 #import "FreeDrawView.h"
 #import "VertexObj.h"
 #import "FreeDrawShaderTypes.h"
+#import "ViewController.h"

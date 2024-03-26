@@ -14,10 +14,15 @@
 #import "IResourceManager.hpp"
 #import "opengles_brush-Swift.h"
 
+static const float kAlphaForFluorescence = 0.62f; // 蛍光ペン透明度
+
 @interface FreeDrawView ()
 
 @property (nonatomic, strong) CADisplayLink * __nullable displayLink;
 @property BOOL shouldShowBlendingOnOffEffect;
+@property (nonatomic, assign) int colorIndex;
+@property (nonatomic, assign) float strokeWidth;
+@property (nonatomic, assign) DrawingMode drawingMode;
 @end
 
 
@@ -54,12 +59,11 @@
 
 -(void)setupExtraConfigs {
     self.shouldShowBlendingOnOffEffect = NO;
+    self.strokeWidth = 15.0f;
 }
 
 -(float)lineWidth {
-//    return 32.0;
-    long seconds = (long)(NSTimeInterval)([[NSDate date] timeIntervalSince1970]);
-    return MAX(((seconds / 2) % 25), 6);
+    return self.strokeWidth;
 }
 
 // to demonstrate some effects/ideas
@@ -74,27 +78,10 @@
             glEnable(GL_BLEND);
         }
     }
-    
-    // change drawing color
-    [self updateDrawingColor];
 }
 
 -(void)updateDrawingColor {
-    // change color frequently
-    UIColor *color;
-    int seconds = (long)(NSTimeInterval)([[NSDate date] timeIntervalSince1970]) % 20;
-    if (seconds > 15) {
-        color = UIColor.systemRedColor;
-    }
-    else if (seconds > 10) {
-        color = UIColor.systemGreenColor;
-    }
-    else if (seconds > 5) {
-        color = [[UIColor alloc] initWithRed:1 green:1 blue:0.6 alpha:1];
-    }
-    else {
-        color = [[UIColor alloc] initWithRed:0.6 green:1 blue:0 alpha:1];
-    }
+    UIColor *color = [self fetchNextColor];
     
     CGFloat red, green, blue, alpha;
     
@@ -102,10 +89,24 @@
             green: &green
              blue: &blue
             alpha: &alpha];
+    CGFloat finalAlpha = self.drawingMode == DrawingModeHighlighter ? kAlphaForFluorescence : alpha;
     _m_drawColor[0] = [[NSNumber alloc] initWithDouble:red];
     _m_drawColor[1] = [[NSNumber alloc] initWithDouble:green];
     _m_drawColor[2] = [[NSNumber alloc] initWithDouble:blue];
-    _m_drawColor[3] = [[NSNumber alloc] initWithDouble:alpha];
+    _m_drawColor[3] = [[NSNumber alloc] initWithDouble:finalAlpha];
+}
+
+-(UIColor *)fetchNextColor {
+    switch (self.colorIndex % 4) {
+        case 0:
+            return UIColor.systemRedColor;
+        case 1:
+            return UIColor.systemGreenColor;
+        case 2:
+            return [[UIColor alloc] initWithRed:1 green:1 blue:0.6 alpha:1];
+        default:
+            return [[UIColor alloc] initWithRed:0.6 green:1 blue:0 alpha:1];
+    }
 }
 
 - (void)drawView:(nullable CADisplayLink *)displayLink {
@@ -154,11 +155,16 @@
     // 描画色設定
     _m_drawColor = @[].mutableCopy;
     [self updateDrawingColor];
+    [self changeWidth];
 }
 
 - (void)clearOffscreenColor {
     // black transparent // if not calling this, the final brush color will be white :D
     [self clearFrameBuffer:_m_offScreen.framebuffer withRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
+}
+
+- (void)clearFinishedColor {
+    [self clearFrameBuffer:_m_finished.framebuffer withRed:1.0f green:1.0f blue:1.0f alpha:1.0f];
 }
 
 -(void)setupPenTextures {
@@ -217,7 +223,7 @@
     [self setUpFBO:_m_offScreen];
     
     // 描画済み保持用FBO - Framebuffer object for holding all drawn drawings
-//    [self setUpFBO:_m_finished];
+    [self setUpFBO:_m_finished];
 }
 
 - (void)setUpFBO:(FBO&)fbo {
@@ -417,6 +423,7 @@
 - (void)setupViewport {
     NSLog(@"layoutSubviews bounds = (%f, %f)",
           self.bounds.size.width, self.bounds.size.height);
+    [self clearFinishedColor];
     glViewport(0, 0,  self.bounds.size.width, self.bounds.size.height);
 }
 
@@ -478,6 +485,46 @@
     [self applyDrawColorWith:_m_drawColor];
     
     [self drawTexture:_m_offScreen.texture toFramebuffer:_m_onScreen.framebuffer];
+}
+
+- (void)renderOffscreenTextureToFinished {
+    [self useProgram:ProgramTypeWhiteAsAlphaProgram];
+    [self applyDrawColorWith:_m_drawColor];
+    
+    [self drawTexture:_m_offScreen.texture toFramebuffer:_m_finished.framebuffer];
+}
+
+- (void)renderFinishedTextureToOnScreen {
+    // 記入済みレイヤをオンスクリーンにブレンドせずに描画
+    // Draw filled layers onscreen without blending
+    [self turnOFFColorBlending];
+    [self useProgram:ProgramTypeNormalProgram];
+    [self drawTexture:_m_finished.texture toFramebuffer:_m_onScreen.framebuffer];
+    [self turnONColorBlending];
+}
+
+-(void)changeBg { }
+
+-(void)changeColor {
+    self.colorIndex += 1;
+    [self updateDrawingColor];
+}
+
+-(void)changeWidth {
+    int width = (int)self.strokeWidth;
+    width += 4;
+    
+    self.strokeWidth = (float)MAX(width % 25, 6);
+}
+
+-(void)clearDrawings {
+    [self clearFrameBuffer:_m_offScreen.framebuffer withRed:1.0f green:1.0f blue:1.0f alpha:1.0f];
+    [self clearFrameBuffer:_m_finished.framebuffer withRed:1.0f green:1.0f blue:1.0f alpha:1.0f];
+}
+
+-(void)changeModeTo:(DrawingMode)mode {
+    self.drawingMode = mode;
+    [self updateDrawingColor];
 }
 
 #pragma mark - touchesEvent

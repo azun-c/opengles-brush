@@ -7,9 +7,9 @@
 
 #import "ViewController.h"
 #import "DrawingCurveState.h"
+#import "opengles_brush-Swift.h"
 
 @interface ViewController ()
-@property (nonatomic, strong) FreeDrawView* freeDrawView;
 @property (nonatomic, assign) CGFloat lastScale;
 @property (nonatomic, assign) CGPoint lastPoint;
 @end
@@ -26,6 +26,7 @@
 -(void)setupUI {
     [self setupFreeDrawView];
     [self updateTitleIfNeeded];
+    [self setupButtons];
 }
 
 -(void)setupFreeDrawView {
@@ -62,7 +63,7 @@
 }
 
 -(void)setupEffects {
-    [self setupBackgroundEffect];
+//    [self setupBackgroundEffect];
     [self setupZoomInEffect];
 }
 

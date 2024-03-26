@@ -41,6 +41,11 @@ typedef NS_ENUM(NSInteger, ProgramType) {
     ProgramTypeWhiteAsAlphaProgram,
 };
 
+typedef NS_ENUM(NSInteger, DrawingMode) {
+    DrawingModeBrush,
+    DrawingModeHighlighter,
+};
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FreeDrawView : UIView
@@ -56,7 +61,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) ColorBuffer m_onScreen;
 @property (nonatomic, assign) FBO m_offScreen;
-//@property (nonatomic, assign) FBO m_finished;
+@property (nonatomic, assign) FBO m_finished;
 
 @property (nonatomic, assign) Program *m_pProgram;
 @property (nonatomic, assign) Program m_normalProgram;
@@ -72,6 +77,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)drawEnd;
 - (void)drawTexture:(GLuint)texture toFramebuffer:(GLuint)framebuffer;
 - (void)renderOffscreenTextureToOnscreen;
+- (void)renderOffscreenTextureToFinished;
+- (void)renderFinishedTextureToOnScreen;
 - (void)clearOffscreenColor;
 - (void)setPenTextureWithWidth:(float)width;
 - (void)useProgram:(ProgramType)type;
@@ -80,6 +87,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)turnONColorBlending;
 - (void)turnOFFColorBlending;
 - (void)blendAlpha;
+
+-(void)changeBg;
+-(void)changeColor;
+-(void)changeWidth;
+-(void)clearDrawings;
+-(void)changeModeTo:(DrawingMode)mode;
 @end
 
 NS_ASSUME_NONNULL_END

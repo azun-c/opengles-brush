@@ -8,6 +8,6 @@
 #import "FreeDrawView.h"
 
 @interface ViewController : UIViewController
-
+@property (nonatomic, strong) FreeDrawView* freeDrawView;
 @end
 
