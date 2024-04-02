@@ -22,6 +22,7 @@ enum BlendingMode {
         view.clearColor = defaultOffscreenColor
         view.backgroundColor = .clear
         view.autoResizeDrawable = true
+        view.sampleCount = maxSampleCount
         view.delegate = self
         return view
     }()
@@ -42,6 +43,7 @@ enum BlendingMode {
     private lazy var viewportSize = SIMD2<Float>.zero
     private lazy var commandQueue = metalDevice.makeCommandQueue()!
     private lazy var defaultLibrary = metalDevice.makeDefaultLibrary()!
+    private lazy var textureSamplerState = createSamplerState()
     
     private lazy var penTextures = [String: MTLTexture]()
     private lazy var quadVertexBuffer = createQuadVertexBuffer()
@@ -75,13 +77,17 @@ enum BlendingMode {
     // A pipeline object to render to the finished texture.
     private lazy var curveToFinishedRenderPipeline = createPipeline(of: .whiteAsAlphaProgram, mode: .add)
     // A pipeline object to copy finished texture to onscreen.
-    private lazy var finishedToOnscreenRenderPipeline = createPipeline(of: .normalProgram, mode: .none)
+    private lazy var finishedToOnscreenRenderPipeline = createPipeline(of: .normalProgram, mode: .none,
+                                                                       sampleCount: maxSampleCount)
     // A pipeline object to render new drawings texture (offscreen texture) to intermediate layer
     // when a finger taps and moves along
     private lazy var liveActionPipeline = createPipeline(of: .whiteAsAlphaProgram, mode: .add)
     // A pipeline object to render new drawings texture (offscreen texture) to intermediate layer
     // responsible for background rendering (finished texture)
     private lazy var liveActionBackgroundPipeline = createPipeline(of: .normalProgram, mode: .none)
+    // to onscreen
+    private lazy var liveActionBackgroundToOnscreenPipeline = createPipeline(of: .normalProgram, mode: .none,
+                                                                             sampleCount: maxSampleCount)
     
     // Pen Texture to sample from.
     private var penTexture: MTLTexture? {
@@ -129,19 +135,21 @@ extension FreeDrawViewRenderer: MTKViewDelegate {
 
 //MARK: - Private properties
 private extension FreeDrawViewRenderer {
-    private var drawingRect: CGRect {
+    var drawingRect: CGRect {
         targetView?.bounds ?? .zero
     }
-    private var vertices: [VertexObj] {
+    
+    var vertices: [VertexObj] {
         (targetView?.vertices ?? []).compactMap {
             $0 as? VertexObj
         }
     }
-    private var lineWidth: Float {
+    
+    var lineWidth: Float {
         targetView?.lineWidth ?? 6
     }
     
-    private var drawingColor: SIMD4<Float> {
+    var drawingColor: SIMD4<Float> {
         guard let colorArray = targetView?.m_drawColor else {
             return .zero
         }
@@ -151,7 +159,7 @@ private extension FreeDrawViewRenderer {
                      Float(colorArray[safe: 3] as? Double ?? 0))
     }
     
-    private var touchState: TouchState {
+    var touchState: TouchState {
         get {
             targetView?.touchState ?? .none
         }
@@ -159,10 +167,21 @@ private extension FreeDrawViewRenderer {
             targetView?.touchState = newValue
         }
     }
+    
+    var maxSampleCount: Int { 4 }
 }
 
 //MARK: - Private
 private extension FreeDrawViewRenderer {
+    func createSamplerState() -> MTLSamplerState {
+        let samplerDescriptor = MTLSamplerDescriptor()
+        samplerDescriptor.sAddressMode = .clampToEdge
+        samplerDescriptor.tAddressMode = .clampToEdge
+        samplerDescriptor.minFilter = .linear
+        samplerDescriptor.magFilter = .linear
+        return metalDevice.makeSamplerState(descriptor: samplerDescriptor)!
+    }
+    
     func createQuadVertexBuffer() -> MTLBuffer? {
         let quadVertices: [FreeDrawTextureVertex] =
         [
@@ -207,7 +226,7 @@ private extension FreeDrawViewRenderer {
                           clearColor: MTLClearColor, storeAction: MTLStoreAction) -> MTLRenderPassDescriptor {
         let descriptor = MTLRenderPassDescriptor()
         
-        descriptor.colorAttachments[0].texture = targetTexture;
+        descriptor.colorAttachments[0].texture = targetTexture
         descriptor.colorAttachments[0].loadAction = loadAction
         descriptor.colorAttachments[0].clearColor = clearColor
         descriptor.colorAttachments[0].storeAction = storeAction
@@ -226,7 +245,8 @@ private extension FreeDrawViewRenderer {
         return metalDevice.makeTexture(descriptor: texDescriptor)!
     }
     
-    func createPipeline(of type: ProgramType, mode: BlendingMode, label: String = "") -> MTLRenderPipelineState {
+    func createPipeline(of type: ProgramType, mode: BlendingMode,
+                        sampleCount: Int = 1, label: String = "") -> MTLRenderPipelineState {
         let descriptor = MTLRenderPipelineDescriptor()
         descriptor.label = label
         switch type {
@@ -257,11 +277,12 @@ private extension FreeDrawViewRenderer {
             renderBufferAttachment.sourceRGBBlendFactor = .sourceAlpha
             renderBufferAttachment.destinationRGBBlendFactor = .oneMinusSourceAlpha
         }
+        descriptor.rasterSampleCount = sampleCount
         
         return try! metalDevice.makeRenderPipelineState(descriptor: descriptor)
     }
     
-    func loadTexture(from name: String) -> MTLTexture? {
+    func loadPenTexture(from name: String) -> MTLTexture? {
         if let penTexture = penTextures[name] {
             return penTexture
         }
@@ -277,20 +298,21 @@ private extension FreeDrawViewRenderer {
         return texture
     }
     
-    func loadPenTexture() -> MTLTexture? {
-        let name: String
-        let curveWidth = lineWidth
-        if curveWidth > 24.0 {
-            name = "FreeDrawPenGray_32"
-        } else if curveWidth > 12.0 {
-            name = "FreeDrawPenGray_16"
-        } else if curveWidth > 6.0 {
-            name = "FreeDrawPenGray-2_32"
-        } else {
-            name = "FreeDrawPenGray-2_16"
+    func loadPenTexture(with radius: Float = 32) -> MTLTexture? {
+        let name = "texture_\(radius.asInt)"
+        if let penTexture = penTextures[name] {
+            return penTexture
         }
-        
-        return loadTexture(from: name)
+        let loader = MTKTextureLoader(device: metalDevice)
+        guard let image = UIImage.roundedImage(with: radius.asCGFloat, fillColor: .red),
+              let cgImage = image.cgImage else { return nil }
+        let texture = try? loader.newTexture(cgImage: cgImage, options: nil)
+        penTextures[name] = texture
+        return texture
+    }
+    
+    func loadPenTexture() -> MTLTexture? {
+        return loadPenTexture(with: lineWidth)
     }
 }
 
@@ -302,10 +324,12 @@ private extension FreeDrawViewRenderer {
         
         guard let renderEncoder =
                 commandBuffer.makeRenderCommandEncoder(descriptor: curveTextureRenderPass) else { return }
-        renderEncoder.label = "Offscreen Render Encoder";
+        renderEncoder.label = "Offscreen Render Encoder"
         renderEncoder.setRenderPipelineState(curveRenderPipeline)
         
         renderEncoder.setFragmentTexture(penTexture, index: FreeDrawTextureInputIndexColor.rawValue.asInt)
+        renderEncoder.setFragmentSamplerState(textureSamplerState,
+                                              index: FreeDrawSamplerInputIndexSampler.rawValue.asInt)
         
         let triangleVertexBuffer = metalDevice.makeBuffer(bytes: triangleVertices,
                                                           length: triangleVertices.size(),
@@ -325,11 +349,13 @@ private extension FreeDrawViewRenderer {
     func renderOffscreenToFinished(with commandBuffer: MTLCommandBuffer) {
         guard let renderEncoder = 
                 commandBuffer.makeRenderCommandEncoder(descriptor: offscreenToFinishedRenderPass) else { return }
-        renderEncoder.label = "Offscreen to Finished Encoder";
+        renderEncoder.label = "Offscreen to Finished Encoder"
         renderEncoder.setRenderPipelineState(curveToFinishedRenderPipeline)
         
         // Set the curveTexture as the source texture.
         renderEncoder.setFragmentTexture(curveTexture, index: FreeDrawTextureInputIndexColor.rawValue.asInt)
+        renderEncoder.setFragmentSamplerState(textureSamplerState,
+                                              index: FreeDrawSamplerInputIndexSampler.rawValue.asInt)
         
         renderEncoder.setVertexBuffer(quadVertexBuffer, offset: 0,
                                       index: FreeDrawVertexInputIndexVertices.rawValue.asInt)
@@ -348,11 +374,13 @@ private extension FreeDrawViewRenderer {
         guard let onscreenRenderPassDescriptor = view.currentRenderPassDescriptor else { return }
         guard let renderEncoder = 
                 commandBuffer.makeRenderCommandEncoder(descriptor: onscreenRenderPassDescriptor) else { return }
-        renderEncoder.label = "Finished to Onscreen Encoder";
+        renderEncoder.label = "Finished to Onscreen Encoder"
         renderEncoder.setRenderPipelineState(finishedToOnscreenRenderPipeline)
         
         // Set the finishedTexture as the source texture.
         renderEncoder.setFragmentTexture(finishedTexture, index: FreeDrawTextureInputIndexColor.rawValue.asInt)
+        renderEncoder.setFragmentSamplerState(textureSamplerState,
+                                              index: FreeDrawSamplerInputIndexSampler.rawValue.asInt)
         
         renderEncoder.setVertexBuffer(quadVertexBuffer, offset: 0,
                                       index: FreeDrawVertexInputIndexVertices.rawValue.asInt)
@@ -370,10 +398,12 @@ private extension FreeDrawViewRenderer {
     func renderFinishedToLiveAction(with commandBuffer: MTLCommandBuffer) {
         guard let renderEncoder = 
                 commandBuffer.makeRenderCommandEncoder(descriptor: liveActionRenderPass) else { return }
-        renderEncoder.label = "Finished to LiveAction encoder";
+        renderEncoder.label = "Finished to LiveAction encoder"
         renderEncoder.setRenderPipelineState(liveActionBackgroundPipeline)
         
         renderEncoder.setFragmentTexture(finishedTexture, index: FreeDrawTextureInputIndexColor.rawValue.asInt)
+        renderEncoder.setFragmentSamplerState(textureSamplerState,
+                                              index: FreeDrawSamplerInputIndexSampler.rawValue.asInt)
         
         renderEncoder.setVertexBuffer(quadVertexBuffer, offset: 0,
                                       index: FreeDrawVertexInputIndexVertices.rawValue.asInt)
@@ -390,10 +420,12 @@ private extension FreeDrawViewRenderer {
     func renderOffscreenToLiveAction(with commandBuffer: MTLCommandBuffer) {
         guard let renderEncoder = 
                 commandBuffer.makeRenderCommandEncoder(descriptor: liveActionRenderPass) else { return }
-        renderEncoder.label = "Offscreen to LiveAction encoder";
+        renderEncoder.label = "Offscreen to LiveAction encoder"
         renderEncoder.setRenderPipelineState(liveActionPipeline)
         
         renderEncoder.setFragmentTexture(curveTexture, index: FreeDrawTextureInputIndexColor.rawValue.asInt)
+        renderEncoder.setFragmentSamplerState(textureSamplerState,
+                                              index: FreeDrawSamplerInputIndexSampler.rawValue.asInt)
         
         renderEncoder.setVertexBuffer(quadVertexBuffer, offset: 0,
                                       index: FreeDrawVertexInputIndexVertices.rawValue.asInt)
@@ -411,11 +443,13 @@ private extension FreeDrawViewRenderer {
         guard let onscreenRenderPassDescriptor = view.currentRenderPassDescriptor,
                 let renderEncoder =
                 commandBuffer.makeRenderCommandEncoder(descriptor: onscreenRenderPassDescriptor) else { return }
-        renderEncoder.label = "LiveAction to Onscreen Render Encoder";
-        renderEncoder.setRenderPipelineState(liveActionBackgroundPipeline)
+        renderEncoder.label = "LiveAction to Onscreen Render Encoder"
+        renderEncoder.setRenderPipelineState(liveActionBackgroundToOnscreenPipeline)
         
         // Set the liveActionTexture as the source texture.
         renderEncoder.setFragmentTexture(liveActionTexture, index: FreeDrawTextureInputIndexColor.rawValue.asInt)
+        renderEncoder.setFragmentSamplerState(textureSamplerState,
+                                              index: FreeDrawSamplerInputIndexSampler.rawValue.asInt)
         
         renderEncoder.setVertexBuffer(quadVertexBuffer, offset: 0,
                                       index: FreeDrawVertexInputIndexVertices.rawValue.asInt)

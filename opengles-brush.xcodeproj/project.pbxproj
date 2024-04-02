@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1E880A982BBB95E1009961A2 /* FreeDrawViewRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E880A972BBB95E1009961A2 /* FreeDrawViewRenderer.swift */; };
+		1E880A9A2BBBDD3D009961A2 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E880A992BBBDD3D009961A2 /* UIImage+Extensions.swift */; };
 		1EA06C752BB2545E00EFD7EA /* ViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA06C742BB2545E00EFD7EA /* ViewController+Extensions.swift */; };
 		F5811A022B96FD05001C7031 /* VertexObj.m in Sources */ = {isa = PBXBuildFile; fileRef = F5811A002B96FD04001C7031 /* VertexObj.m */; };
 		F5811A052B96FD62001C7031 /* Normal.metal in Sources */ = {isa = PBXBuildFile; fileRef = F5811A042B96FD62001C7031 /* Normal.metal */; };
@@ -46,6 +47,7 @@
 
 /* Begin PBXFileReference section */
 		1E880A972BBB95E1009961A2 /* FreeDrawViewRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeDrawViewRenderer.swift; sourceTree = "<group>"; };
+		1E880A992BBBDD3D009961A2 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		1EA06C742BB2545E00EFD7EA /* ViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Extensions.swift"; sourceTree = "<group>"; };
 		F53C0A4A2B63A07800372224 /* Polyline.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Polyline.hpp; sourceTree = "<group>"; };
 		F58119FD2B96FBAA001C7031 /* opengles-brush-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "opengles-brush-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				F5E6CF0B2B62076000B38F16 /* IResourceManager.hpp */,
 				F5E6CF0C2B6207D000B38F16 /* ResourceManager.mm */,
 				F5811A062B96FDC3001C7031 /* Scalar+Extensions.swift */,
+				1E880A992BBBDD3D009961A2 /* UIImage+Extensions.swift */,
 			);
 			path = utilities;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 				1EA06C752BB2545E00EFD7EA /* ViewController+Extensions.swift in Sources */,
 				F5811A072B96FDC3001C7031 /* Scalar+Extensions.swift in Sources */,
 				F5811A052B96FD62001C7031 /* Normal.metal in Sources */,
+				1E880A9A2BBBDD3D009961A2 /* UIImage+Extensions.swift in Sources */,
 				F5E6CF0D2B6207D000B38F16 /* ResourceManager.mm in Sources */,
 				F5811A092B96FE69001C7031 /* FreeDrawView+Extensions.swift in Sources */,
 				F5B79F9D2B62159B004BD866 /* Polyline.cpp in Sources */,

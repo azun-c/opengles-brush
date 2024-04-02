@@ -519,7 +519,7 @@ static const float kAlphaForFluorescence = 0.5f; // 蛍光ペン透明度
     int width = (int)self.strokeWidth;
     width += 4;
     
-    self.strokeWidth = (float)MAX(width % 25, 6);
+    self.strokeWidth = (float)MAX(width % 32, 6);
 }
 
 -(void)clearDrawings {

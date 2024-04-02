@@ -23,3 +23,13 @@ extension CGFloat {
         Int(self)
     }
 }
+
+extension Float {
+    var asCGFloat: CGFloat {
+        CGFloat(self)
+    }
+    
+    var asInt: Int {
+        Int(self)
+    }
+}
