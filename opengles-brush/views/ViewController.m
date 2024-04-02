@@ -31,7 +31,7 @@
 
 -(void)setupFreeDrawView {
     CGSize viewSize = self.view.bounds.size;
-    CGSize drawSize = CGSizeMake(viewSize.width, viewSize.width / 1.7);
+    CGSize drawSize = CGSizeMake(viewSize.width, viewSize.height - 300);
     CGRect drawRect = CGRectMake(0, (viewSize.height - drawSize.height)/2, drawSize.width, drawSize.height);
     
     self.freeDrawView = [[FreeDrawView alloc] initWithFrame:drawRect];

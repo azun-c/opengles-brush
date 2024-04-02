@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)onRender {    
     [self.view drawBegin];
     
-    [self renderCurveOnOffscreen];
+    [self renderCurveToOffscreen];
     [self.view renderFinishedTextureToOnScreen];
     [self.view renderOffscreenTextureToOnscreen];
     
@@ -42,14 +42,14 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)onRenderFinished {
     [self.view drawBegin];
     
-    [self renderCurveOnOffscreen];
+    [self renderCurveToOffscreen];
     [self.view renderOffscreenTextureToFinished]; // <----
     [self.view renderFinishedTextureToOnScreen];
     
     [self.view drawEnd];
 }
 
-- (void)renderCurveOnOffscreen {
+- (void)renderCurveToOffscreen {
     [self.view turnONColorBlending];
     [self.view blendAlpha];
     // Clear the offscreen color buffer with black

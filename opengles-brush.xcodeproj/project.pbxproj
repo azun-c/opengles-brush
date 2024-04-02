@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E880A982BBB95E1009961A2 /* FreeDrawViewRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E880A972BBB95E1009961A2 /* FreeDrawViewRenderer.swift */; };
 		1EA06C752BB2545E00EFD7EA /* ViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EA06C742BB2545E00EFD7EA /* ViewController+Extensions.swift */; };
 		F5811A022B96FD05001C7031 /* VertexObj.m in Sources */ = {isa = PBXBuildFile; fileRef = F5811A002B96FD04001C7031 /* VertexObj.m */; };
 		F5811A052B96FD62001C7031 /* Normal.metal in Sources */ = {isa = PBXBuildFile; fileRef = F5811A042B96FD62001C7031 /* Normal.metal */; };
@@ -44,6 +45,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1E880A972BBB95E1009961A2 /* FreeDrawViewRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeDrawViewRenderer.swift; sourceTree = "<group>"; };
 		1EA06C742BB2545E00EFD7EA /* ViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Extensions.swift"; sourceTree = "<group>"; };
 		F53C0A4A2B63A07800372224 /* Polyline.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Polyline.hpp; sourceTree = "<group>"; };
 		F58119FD2B96FBAA001C7031 /* opengles-brush-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "opengles-brush-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 				F5E6CF082B6202AA00B38F16 /* FreeDrawView.h */,
 				F5E6CF092B6202AA00B38F16 /* FreeDrawView.mm */,
 				F5811A082B96FE69001C7031 /* FreeDrawView+Extensions.swift */,
+				1E880A972BBB95E1009961A2 /* FreeDrawViewRenderer.swift */,
 				F5811A012B96FD05001C7031 /* VertexObj.h */,
 				F5811A002B96FD04001C7031 /* VertexObj.m */,
 				F5E6CEF52B6201D300B38F16 /* ViewController.h */,
@@ -331,6 +334,7 @@
 				F5E6CF022B6201D500B38F16 /* main.m in Sources */,
 				F5E6CF0A2B6202AA00B38F16 /* FreeDrawView.mm in Sources */,
 				F5811A0B2B96FEF0001C7031 /* Collection+Extensions.swift in Sources */,
+				1E880A982BBB95E1009961A2 /* FreeDrawViewRenderer.swift in Sources */,
 				F5811A022B96FD05001C7031 /* VertexObj.m in Sources */,
 				F5E6CEF42B6201D300B38F16 /* SceneDelegate.m in Sources */,
 			);

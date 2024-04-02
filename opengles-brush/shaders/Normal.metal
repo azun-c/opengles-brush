@@ -41,11 +41,11 @@ whiteAsAlphaVertex(const uint vertexID [[ vertex_id ]],
 // Fragment shader that just outputs color passed from rasterizer.
 fragment float4
 whiteAsAlphaFragment(RasterizerData in [[stage_in]],
-                     texture2d<float> texture [[texture(FreeDrawTextureInputIndexColor)]],
-                     sampler sampler2d [[sampler(0)]])
+                     texture2d<float> texture [[texture(FreeDrawTextureInputIndexColor)]])
 {
+    constexpr sampler textureSampler (address::clamp_to_edge, filter::linear);
     // Sample data from the texture.
-    float4 colorSample = texture.sample(sampler2d, in.texcoord);
+    float4 colorSample = texture.sample(textureSampler, in.texcoord);
     float alphaFactor = colorSample.r;
     float4 finalColor = in.drawColor;
     if (alphaFactor > 0.4) {
@@ -83,11 +83,11 @@ normalVertex(const uint vertexID [[ vertex_id ]],
 // Fragment shader that samples a texture and outputs the sampled color.
 fragment float4
 normalFragment(RasterizerData in [[stage_in]],
-               texture2d<float> texture [[texture(FreeDrawTextureInputIndexColor)]],
-               sampler sampler2d [[sampler(0)]])
+               texture2d<float> texture [[texture(FreeDrawTextureInputIndexColor)]])
 {
+    constexpr sampler textureSampler (address::clamp_to_edge, filter::linear);
     // Sample data from the texture.
-    float4 colorSample = texture.sample(sampler2d, in.texcoord);
+    float4 colorSample = texture.sample(textureSampler, in.texcoord);
     
     // Return the color sample as the final color.
     return colorSample;

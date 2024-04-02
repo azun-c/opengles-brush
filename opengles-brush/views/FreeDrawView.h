@@ -46,6 +46,13 @@ typedef NS_ENUM(NSInteger, DrawingMode) {
     DrawingModeHighlighter,
 };
 
+typedef NS_ENUM(NSInteger, TouchState) {
+    TouchStateNone,
+    TouchStateBegan,
+    TouchStateMoved,
+    TouchStateEnded,
+};
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FreeDrawView : UIView
@@ -68,6 +75,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) Program m_whiteAsAlphaProgram;
 
 @property (nonatomic, strong) NSMutableArray<VertexObj *> *vertices;
+@property (nonatomic, assign) TouchState touchState;
 
 - (void)startAnimation;
 

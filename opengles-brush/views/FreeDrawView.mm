@@ -14,7 +14,7 @@
 #import "IResourceManager.hpp"
 #import "opengles_brush-Swift.h"
 
-static const float kAlphaForFluorescence = 0.62f; // 蛍光ペン透明度
+static const float kAlphaForFluorescence = 0.5f; // 蛍光ペン透明度
 
 @interface FreeDrawView ()
 
@@ -34,6 +34,10 @@ static const float kAlphaForFluorescence = 0.62f; // 蛍光ペン透明度
     return [CAEAGLLayer class];
 }
 
+- (void)dealloc {
+    [self wipeOutStaticVars];
+}
+
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
@@ -41,6 +45,7 @@ static const float kAlphaForFluorescence = 0.62f; // 蛍光ペン透明度
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         self.viewState = nil;
+        self.touchState = TouchStateNone;
         
         CAEAGLLayer *eaglLayer = (CAEAGLLayer *)super.layer;
         eaglLayer.opaque = YES;
@@ -81,7 +86,7 @@ static const float kAlphaForFluorescence = 0.62f; // 蛍光ペン透明度
 }
 
 -(void)updateDrawingColor {
-    UIColor *color = [self fetchNextColor];
+    UIColor *color = [self fetchDrawingColor];
     
     CGFloat red, green, blue, alpha;
     
@@ -96,7 +101,7 @@ static const float kAlphaForFluorescence = 0.62f; // 蛍光ペン透明度
     _m_drawColor[3] = [[NSNumber alloc] initWithDouble:finalAlpha];
 }
 
--(UIColor *)fetchNextColor {
+-(UIColor *)fetchDrawingColor {
     switch (self.colorIndex % 4) {
         case 0:
             return UIColor.systemRedColor;
@@ -520,6 +525,7 @@ static const float kAlphaForFluorescence = 0.62f; // 蛍光ペン透明度
 -(void)clearDrawings {
     [self clearFrameBuffer:_m_offScreen.framebuffer withRed:1.0f green:1.0f blue:1.0f alpha:1.0f];
     [self clearFrameBuffer:_m_finished.framebuffer withRed:1.0f green:1.0f blue:1.0f alpha:1.0f];
+    [self clearMetalDrawings];
 }
 
 -(void)changeModeTo:(DrawingMode)mode {
@@ -530,17 +536,21 @@ static const float kAlphaForFluorescence = 0.62f; // 蛍光ペン透明度
 #pragma mark - touchesEvent
 - (void)touchesBegan:(NSSet *)touches withEvent:(nullable UIEvent *)event {
     [self.viewState touchesBegan:touches withEvent:event];
+    self.touchState = TouchStateBegan;
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(nullable UIEvent *)event {
     [self.viewState touchesMoved:touches withEvent:event];
+    self.touchState = TouchStateMoved;
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(nullable UIEvent *)event {
     [self.viewState touchesEnded:touches withEvent:event];
+    self.touchState = TouchStateEnded;
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(nullable UIEvent *)event {
     [self.viewState touchesCancelled:touches withEvent:event];
+    self.touchState = TouchStateNone;
 }
 @end
